@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Hp;
+use App\Models\OtpVerification;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+class AuthenticatedSessionController extends Controller
+{
+    /**
+     * Handle an incoming authentication request.
+     */
+    public function store(LoginRequest $request)
+    {
+        $user = User::where('npk', $request->npk)->first();
+
+        if ($user && Hash::check($request->password, $user->password)) {
+            Auth::login($user);
+
+            $otp = rand(100000, 999999);
+            session(['otp_code' => $otp, 'otp_verified' => false]);
+            $hp = Hp::where('npk', $user->npk)->first()->hp;
+
+            OtpVerification::create([
+                'id_user'    => Auth::user()->id,
+                'otp'       => $otp,
+                'hp'       => $hp,
+                'expiry_date' => Carbon::now()->addMinutes(5),
+                'send' => 'queue',
+                'send_date' => null,
+                'use' => false,
+                'use_date' => null,
+            ]);
+
+
+            return redirect()->route('otp-verif');
+        }
+
+        return back()->with('error', 'NPK atau password salah.')->withInput($request->only('npk'));
+    }
+
+    /**
+     * Destroy an authenticated session.
+     */
+    public function destroy()
+    {
+        Auth::logout();
+        return redirect()->route('login');
+    }
+}
