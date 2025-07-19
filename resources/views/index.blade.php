@@ -21,7 +21,7 @@
 <body class="g-sidenav-show  bg-gray-100">
     <x-sidebar></x-sidebar>
     <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
-        <x-navbar>Dashboard</x-navbar>
+        <x-navbar title="Dashboard" breadcumb="Dashboard"></x-navbar>
         <div class="container-fluid py-4">
             <x-kpi></x-kpi>
             <div class="row mt-4">

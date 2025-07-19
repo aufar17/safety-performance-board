@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccidentController;
 use App\Http\Controllers\CaptchaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MainController;
@@ -16,6 +17,13 @@ Route::post('resend-otp', [OtpController::class, 'resendOtp'])->name('resend-otp
 //MAIN FEATURES
 Route::get('/', [MainController::class, 'index'])->name('index');
 Route::get('accident', [MainController::class, 'accident'])->name('accident');
+
+
+//ACCIDENT FEATURES
+Route::post('accident-post', [AccidentController::class, 'accidentPost'])->name('accident-post');
+Route::post('accident-update', [AccidentController::class, 'accidentUpdate'])->name('accident-update');
+Route::post('accident-delete', [AccidentController::class, 'accidentDelete'])->name('accident-delete');
+
 
 
 require __DIR__ . '/auth.php';
