@@ -15,7 +15,7 @@
         <ul class="navbar-nav">
             <x-navlink href="{{ route('index') }}" :active="request()->is('/') " icon="fa-house">Dashboard</x-navlink>
 
-            <x-navlink href="{{ route('shipping') }}" :active="request()->is('shipping')" icon="fa-globe">Welcome
+            <x-navlink href="{{ route('accident') }}" :active="request()->is('accident')" icon="fa-globe">Accident
             </x-navlink>
 
             <li class="nav-item mt-3">

@@ -10,8 +10,8 @@ class MainController extends Controller
     {
         return view('index');
     }
-    public function shipping()
+    public function accident()
     {
-        return view('shipping');
+        return view('accident');
     }
 }

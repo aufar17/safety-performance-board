@@ -15,6 +15,7 @@ Route::post('resend-otp', [OtpController::class, 'resendOtp'])->name('resend-otp
 
 //MAIN FEATURES
 Route::get('/', [MainController::class, 'index'])->name('index');
-Route::get('shipping', [MainController::class, 'shipping'])->name('shipping');
+Route::get('accident', [MainController::class, 'accident'])->name('accident');
+
 
 require __DIR__ . '/auth.php';
