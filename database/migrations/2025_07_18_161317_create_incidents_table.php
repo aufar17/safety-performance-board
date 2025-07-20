@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('incidents', function (Blueprint $table) {
             $table->id();
-            $table->string('accident');
-            $table->string('category');
+            $table->integer('accident_id');
+            $table->integer('category_id');
             $table->date('date');
             $table->timestamps();
         });

@@ -17,6 +17,7 @@ Route::post('resend-otp', [OtpController::class, 'resendOtp'])->name('resend-otp
 //MAIN FEATURES
 Route::get('/', [MainController::class, 'index'])->name('index');
 Route::get('accident', [MainController::class, 'accident'])->name('accident');
+Route::get('monitoring', [MainController::class, 'monitoring'])->name('monitoring');
 
 
 //ACCIDENT FEATURES

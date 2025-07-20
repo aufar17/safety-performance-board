@@ -122,6 +122,8 @@
                                         <label for="exampleInputCaptcha1" class="form-label">Captcha</label>
                                     </div>
                                     <button type="submit" class="btn btn-login w-100 mt-3">Submit</button>
+                                    <a href="{{ route('monitoring') }}" class="btn btn-warning w-100 mt-3">Safety
+                                        Performance Dashboard</a>
                                 </form>
                             </div>
                         </div>

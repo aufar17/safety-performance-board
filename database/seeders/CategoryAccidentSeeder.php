@@ -18,7 +18,7 @@ class CategoryAccidentSeeder extends Seeder
                 'category' => 'First Aid',
             ],
             [
-                'category' => 'Non-LWD',
+                'category' => 'Non LWD',
             ],
             [
                 'category' => 'LWD',

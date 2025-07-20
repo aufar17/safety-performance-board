@@ -69,8 +69,8 @@
                             @forelse ($incidents as $incident)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $incident->accident }}</td>
-                                <td>{{ $incident->category }}</td>
+                                <td>{{ $incident->accident->accident }}</td>
+                                <td>{{ $incident->category->category }}</td>
                                 <td>{{ $incident->date }}</td>
                                 <td>
                                     <button class="badge bg-warning border-0" data-bs-toggle="modal"
@@ -93,8 +93,6 @@
             </x-card>
         </div>
     </main>
-    <x-sidebar-plugin></x-sidebar-plugin>
-
     @foreach ($incidents as $incident)
     <div class="modal fade" id="editAccidentModal{{ $incident->id }}" tabindex="-1"
         aria-labelledby="editAccidentModalLabel{{ $incident->id }}" aria-hidden="true">
@@ -114,7 +112,7 @@
                             <select name="accident" class="form-select" required>
                                 <option disabled>-- Choose Accident --</option>
                                 @foreach ($accidents as $accident)
-                                <option value="{{ $accident->accident }}" {{ $incident->accident == $accident->accident
+                                <option value="{{ $accident->id }}" {{ $incident->accident == $accident->accident
                                     ? 'selected' : '' }}>
                                     {{ $accident->accident }}
                                 </option>
@@ -127,7 +125,7 @@
                             <select name="category" class="form-select" required>
                                 <option disabled>-- Choose Category --</option>
                                 @foreach ($categories as $category)
-                                <option value="{{ $category->category }}" {{ $incident->category == $category->category
+                                <option value="{{ $category->id }}" {{ $incident->category == $category->category
                                     ? 'selected' : '' }}>
                                     {{ $category->category }}
                                 </option>
@@ -205,7 +203,7 @@
                             <select name="accident" class="form-select" id="accident" required>
                                 <option disabled selected>-- Choose Accident --</option>
                                 @foreach ($accidents as $accident)
-                                <option value="{{ $accident->accident }}">{{ $accident->accident }}</option>
+                                <option value="{{ $accident->id }}">{{ $accident->accident }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -214,7 +212,7 @@
                             <select name="category" class="form-select" id="category" required>
                                 <option disabled selected>-- Choose Category --</option>
                                 @foreach ($categories as $category)
-                                <option value="{{ $category->category }}">{{ $category->category }}</option>
+                                <option value="{{ $category->id }}">{{ $category->category }}</option>
                                 @endforeach
                             </select>
                         </div>

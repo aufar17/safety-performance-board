@@ -18,6 +18,11 @@ class CheckSession
             return $next($request);
         }
 
+        if (in_array($routeName, ['captcha', 'monitoring'])) {
+            return $next($request);
+        }
+
+
         // Cek user login
         if (!Auth::check()) {
             if (!in_array($routeName, ['login', 'login-post'])) {

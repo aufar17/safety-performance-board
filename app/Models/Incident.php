@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Incident extends Model
@@ -10,19 +11,19 @@ class Incident extends Model
     protected $connection = 'mysql';
     protected $table = 'incidents';
     protected $fillable = [
-        'accident',
-        'category',
+        'accident_id',
+        'category_id',
         'date',
     ];
 
 
-    public function category(): HasMany
+    public function category(): BelongsTo
     {
-        return $this->hasMany(CategoryAccident::class, 'category');
+        return $this->belongsTo(CategoryAccident::class, 'category_id', 'id');
     }
 
-    public function accident(): HasMany
+    public function accident(): BelongsTo
     {
-        return $this->hasMany(Accident::class, 'accident');
+        return $this->belongsTo(Accident::class, 'accident_id', 'id');
     }
 }

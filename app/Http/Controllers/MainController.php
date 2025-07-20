@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Accident;
 use App\Models\CategoryAccident;
 use App\Models\Incident;
+use App\Services\MonitoringService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,11 @@ class MainController extends Controller
 {
     public function index()
     {
-        return view('index');
+        $user = Auth::user();
+        $data = [
+            'user' => $user
+        ];
+        return view('index', $data);
     }
     public function accident()
     {
@@ -39,5 +44,13 @@ class MainController extends Controller
         ];
 
         return view('accident', $data);
+    }
+
+    public function monitoring()
+    {
+
+        $service = new MonitoringService();
+        $data = $service->monitoring();
+        return view('monitoring', $data);
     }
 }

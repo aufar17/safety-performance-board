@@ -22,7 +22,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Monitoring</h6>
             </li>
 
-            <x-navlink href="{{ route('accident') }}" :active="request()->is('accident')" icon="fa-globe">Accident
+            <x-navlink href="{{ route('monitoring') }}" :active="request()->is('monitoring')" icon="fa-globe">Monitoring
             </x-navlink>
         </ul>
     </div>

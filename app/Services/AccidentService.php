@@ -17,8 +17,8 @@ class AccidentService
         DB::beginTransaction();
         try {
             $incident = Incident::create([
-                'accident' => $request->accident,
-                'category' => $request->category,
+                'accident_id' => $request->accident,
+                'category_id' => $request->category,
                 'date'     => $request->date,
             ]);
 
@@ -45,8 +45,8 @@ class AccidentService
         DB::beginTransaction();
         try {
             $incident->update([
-                'accident' => $request->accident,
-                'category' => $request->category,
+                'accident_id' => $request->accident,
+                'category_id' => $request->category,
                 'date' => $request->date,
             ]);
 
