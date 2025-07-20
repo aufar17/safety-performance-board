@@ -18,64 +18,56 @@
 
 <x-head></x-head>
 
-<body class="g-sidenav-show  bg-gray-100">
-    <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
-        <x-navbar-monitoring title="Dashboard" breadcumb="Dashboard"></x-navbar-monitoring>
-        <div class="container-fluid py-4">
-            <h2 class="text-center text-uppercase mt-0" style="letter-spacing: 2px;">Safety Performance Board</h2>
-            <div class="row d-flex justify-content-between">
-                <div class="col-md-12 col-lg-8 px-4">
-                    <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px;">Update Tanggal <span
-                            class="badge bg-dark">{{ $now }}</span>
+<body class="g-sidenav-show bg-gray-100">
+    <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg">
+        <x-navbar-monitoring title="Dashboard" breadcumb="Dashboard" />
+        <div class="container-fluid py-1">
+            <h2 class="text-center text-uppercase mb-4" style="letter-spacing: 2px;">Safety Performance Board</h2>
+
+            <div class="row align-items-start gy-2">
+                <div class="col-lg-8 col-md-12 px-4">
+                    <h4 class="text-uppercase fw-bolder mb-2" style="letter-spacing: 1px;">
+                        Update Tanggal
+                        <span class="badge bg-dark">{{ $now }}</span>
                     </h4>
-                    <h5 class="text-uppercase fw-bolder mt-4 " style="letter-spacing: 1px;"><span
-                            class="badge bg-warning text-dark">Periode
-                            Tahun :</span>
+                    <h5 class="text-uppercase fw-bolder mt-2" style="letter-spacing: 1px;">
+                        <span class="badge bg-warning text-dark">Periode Tahun :</span>
                         <span class="badge bg-dark">{{ $year }}</span>
                     </h5>
                 </div>
-                <div class="col-md-12 col-lg-4 text-center">
-                    <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px;color:#347433;">Safety Calender</h4>
-                    <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px;">Periode <span
-                            class="badge bg-dark">{{ $month }}</span></h4>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-lg-4 px-4 ">
-                    <h4 class="text-uppercase fw-bolder text-center bg-dark border-radius-sm"
-                        style="letter-spacing: 1px;"><span class="text-white">Informasi
-                            Kejadian</span>
+                <div class="col-lg-4 col-md-12 text-center px-4">
+                    <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px; color:#347433;">Safety Calendar
+                    </h4>
+                    <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px;">
+                        Periode <span class="badge bg-dark">{{ $month }}</span>
                     </h4>
                 </div>
-                <div class="col-12 col-md-4 text-center">
-                    <h4 class="text-uppercase fw-bolder text-center bg-dark border-radius-sm"
-                        style="letter-spacing: 1px;"><span class="text-white">Monitoring Bulanan Total Akumulatif
-                            Accident</span>
-                        </h5>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-4 px-4">
+                    <h4 class="text-uppercase fw-bolder text-center bg-dark border-radius-sm py-2"
+                        style="letter-spacing: 1px;">
+                        <span class="text-white">Informasi Kejadian</span>
+                    </h4>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12 col-lg-4 px-4">
+
+            <div class="row mt-3">
+                <div class="col-lg-4 col-md-12 px-4">
                     <div class="row g-4">
                         @foreach ($mappings as $mapping)
                         <x-accident-information :title="$mapping['accident']" :total="$mapping['total']"
-                            :category="$mapping['categories']" />
+                            :category="$mapping['categories']" :icon="$mapping['icon']" />
                         @endforeach
-
                     </div>
                 </div>
 
-                <div class="col-md-12 col-lg-4 px-4">
+                <div class="col-lg-4 col-md-12 mt-4 mt-lg-0 px-4">
                     <div class="row g-4">
-                        <div class="col-12">
-                            <div class="card shadow-sm border-0 rounded-4 h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold text-primary">Judul Card 4</h5>
-                                    <p class="card-text text-muted">Deskripsi card pertama di kolom tengah.</p>
-                                    <a href="#" class="btn btn-success btn-sm rounded-pill">Lihat Detail</a>
-                                </div>
-                            </div>
-                        </div>
+                        <x-accumulative-accident title="Monitoring Bulanan Total Akumulatif Accident"
+                            icon="fa-solid fa-desktop" :months="$months" :accumulativeAccident="$accumulativeAccident"
+                            chartId="accidentChart1" />
 
                         <div class="col-12">
                             <div class="card shadow-sm border-0 rounded-4 h-100">
@@ -89,10 +81,15 @@
                     </div>
                 </div>
 
+                <!-- <div class="col-lg-4 col-md-12 mt-4 mt-lg-0 px-4">
+                    Tambahkan konten jika ingin membuat kolom ke-3
+                </div> -->
             </div>
-
+        </div>
     </main>
-    <x-script></x-script>
+
+    <x-script />
+    @stack('scripts')
 </body>
 
 </html>
