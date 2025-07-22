@@ -31,7 +31,8 @@
         </div>
 
         <div class="d-flex align-items-center">
-            <span id="currentTime" class="badge bg-danger text-white fw-bold px-3 py-2 me-3" style="font-size: 1rem">
+            <span class="px-3 py-2 me-3">
+                <img src="{{ asset('img/k3.png') }}" alt="K3" class="img-fluid" style="max-width: 70px; height: auto;">
             </span>
 
             <a href="javascript:;" class="nav-link text-body p-0 d-xl-none" id="iconNavbarSidenav">
@@ -45,17 +46,3 @@
 
     </div>
 </nav>
-
-<script>
-    function updateTime() {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, "0");
-        const minutes = String(now.getMinutes()).padStart(2, "0");
-        const seconds = String(now.getSeconds()).padStart(2, "0");
-        const formattedTime = `${hours}:${minutes}:${seconds}`;
-        document.getElementById("currentTime").textContent = formattedTime;
-    }
-
-    setInterval(updateTime, 1000);
-    updateTime();
-</script>

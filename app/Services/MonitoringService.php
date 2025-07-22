@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Accident;
+use App\Models\Incident;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,6 +20,7 @@ class MonitoringService
         $mappings = $this->mappings($year);
         $months = $this->months();
         $accumulativeAccident = $this->accumulativeAccident($year);
+        $calender = $this->calendar();
 
         return compact(
             'user',
@@ -28,7 +30,8 @@ class MonitoringService
             'accidents',
             'mappings',
             'months',
-            'accumulativeAccident'
+            'accumulativeAccident',
+            'calender'
         );
     }
 
@@ -119,5 +122,80 @@ class MonitoringService
         }
 
         return $results;
+    }
+
+    public function calendar(): array
+    {
+        $carbon = Carbon::now()->locale('id');
+        $bulan = $carbon->translatedFormat('F Y');
+
+        $incidentList = Incident::with(['accident', 'category'])
+            ->whereMonth('date', $carbon->month)
+            ->whereYear('date', $carbon->year)
+            ->get();
+
+        $incidents = $incidentList->groupBy(fn($incident) => Carbon::parse($incident->date)->day);
+
+        $hariDalamBulan = $carbon->daysInMonth;
+        $tanggalList = [];
+
+        for ($i = 1; $i <= $hariDalamBulan; $i++) {
+            $tanggal = Carbon::createFromDate($carbon->year, $carbon->month, $i);
+            $tanggalKey = $i;
+
+            $incidentHariIni = $incidents->get($tanggalKey, collect());
+
+            $bgClass = null;
+            if ($incidentHariIni->contains(fn($incident) => $incident->category_id === 4)) {
+                $bgClass = 'bg-danger';
+            } elseif ($incidentHariIni->isNotEmpty()) {
+                $bgClass = 'bg-warning';
+            } else {
+                $bgClass = 'bg-success';
+            }
+
+            $categoryBadge = [];
+
+            if ($incidentHariIni->isNotEmpty()) {
+                $kategoriUnik = $incidentHariIni->pluck('accident_id')->unique();
+
+                foreach ($kategoriUnik as $id) {
+                    $badge = match ($id) {
+                        1 => ['icon' => 'fa-solid fa-notes-medical', 'color' => 'text-success'],
+                        2 => ['icon' => 'fa-solid fa-fire', 'color' => 'text-danger'],
+                        3 => ['icon' => 'fa-solid fa-triangle-exclamation', 'color' => 'text-warning'],
+                        default => null,
+                    };
+
+                    if ($badge) {
+                        $categoryBadge[] = $badge;
+                    }
+                }
+            }
+
+
+            $tanggalList[] = [
+                'tanggal' => $tanggal->format('Y-m-d'),
+                'label' => $tanggal->format('j'),
+                'hari' => $tanggal->translatedFormat('l'),
+                'status' => $tanggal->isToday() ? 'today' : ($tanggal->isPast() ? 'past' : 'future'),
+                'bg' => $bgClass,
+                'categoryBadge' => $categoryBadge,
+            ];
+        }
+
+        $offsetHariPertama = Carbon::createFromDate($carbon->year, $carbon->month, 1)->dayOfWeekIso;
+
+        $days = collect(range(1, 7))->map(function ($i) {
+            return Carbon::create()->startOfWeek()->addDays($i - 1)->locale('id')->translatedFormat('l');
+        });
+
+        return [
+            'incidents' => $incidents,
+            'bulan' => $bulan,
+            'tanggalList' => $tanggalList,
+            'offsetHariPertama' => $offsetHariPertama,
+            'days' => $days,
+        ];
     }
 }

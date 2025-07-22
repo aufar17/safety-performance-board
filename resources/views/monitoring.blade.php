@@ -18,10 +18,10 @@
 
 <x-head></x-head>
 
-<body class="g-sidenav-show bg-gray-100">
+<body class="g-sidenav-show bg-gray-100 d-flex flex-column min-vh-100">
     <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg">
         <x-navbar-monitoring title="Dashboard" breadcumb="Dashboard" />
-        <div class="container-fluid py-1">
+        <div class="container-fluid pb-4">
             <h2 class="text-center text-uppercase mb-4" style="letter-spacing: 2px;">Safety Performance Board</h2>
 
             <div class="row align-items-start gy-2">
@@ -44,17 +44,12 @@
                 </div>
             </div>
 
-            <div class="row mt-4">
-                <div class="col-4 px-4">
-                    <h4 class="text-uppercase fw-bolder text-center bg-dark border-radius-sm py-2"
+            <div class="row mt-3">
+                <div class="col-lg-4 col-md-12 px-4">
+                    <h4 class="text-uppercase fw-bolder text-center bg-danger border-radius-sm py-2"
                         style="letter-spacing: 1px;">
                         <span class="text-white">Informasi Kejadian</span>
                     </h4>
-                </div>
-            </div>
-
-            <div class="row mt-3">
-                <div class="col-lg-4 col-md-12 px-4">
                     <div class="row g-4">
                         @foreach ($mappings as $mapping)
                         <x-accident-information :title="$mapping['accident']" :total="$mapping['total']"
@@ -69,24 +64,21 @@
                             icon="fa-solid fa-desktop" :months="$months" :accumulativeAccident="$accumulativeAccident"
                             chartId="accidentChart1" />
 
-                        <div class="col-12">
-                            <div class="card shadow-sm border-0 rounded-4 h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold text-primary">Judul Card 5</h5>
-                                    <p class="card-text text-muted">Deskripsi card kedua di kolom tengah.</p>
-                                    <a href="#" class="btn btn-warning btn-sm rounded-pill text-dark">Lihat Detail</a>
-                                </div>
-                            </div>
-                        </div>
+                        <x-statistic-information-k3 title="Informasi Statistik K3" icon="fa-solid fa-desktop" />
                     </div>
                 </div>
-
-                <!-- <div class="col-lg-4 col-md-12 mt-4 mt-lg-0 px-4">
-                    Tambahkan konten jika ingin membuat kolom ke-3
-                </div> -->
+                <div class="col-lg-4 col-md-12 mt-4 mt-lg-0 px-4">
+                    <div class="row g-4">
+                        <x-calender title="Legend" icon="fa-solid fa-calendar" :bulan="$calender['bulan']"
+                            :tanggalList="$calender['tanggalList']" :days=" $calender['days']"
+                            :offsetHariPertama="$calender['offsetHariPertama']" />
+                    </div>
+                </div>
             </div>
         </div>
     </main>
+
+    <x-footer></x-footer>
 
     <x-script />
     @stack('scripts')

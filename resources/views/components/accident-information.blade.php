@@ -25,7 +25,7 @@ $count = [
             </div>
         </div>
     </div>
-    <div class="card-body p-4">
+    <div class="card-body pt-2 pb-4">
         <div class="row mx-0">
             <div class="col-8 py-1" style="background-color:#347433;">
                 <span class="text-white text-uppercase fw-bolder">Total Kejadian</span>

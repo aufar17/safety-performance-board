@@ -122,8 +122,16 @@
                                         <label for="exampleInputCaptcha1" class="form-label">Captcha</label>
                                     </div>
                                     <button type="submit" class="btn btn-login w-100 mt-3">Submit</button>
-                                    <a href="{{ route('monitoring') }}" class="btn btn-warning w-100 mt-3">Safety
+
+                                    <div class="separator my-3 d-flex align-items-center text-muted">
+                                        <hr class="flex-grow-1">
+                                        <span class="px-3 small fw-semibold text-uppercase">or go to dashboard</span>
+                                        <hr class="flex-grow-1">
+                                    </div>
+
+                                    <a href="{{ route('monitoring') }}" class="btn btn-warning w-100 mt-0">Safety
                                         Performance Dashboard</a>
+
                                 </form>
                             </div>
                         </div>
