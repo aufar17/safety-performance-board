@@ -46,7 +46,8 @@
                         style="letter-spacing: 1px;">
                         <span class="text-white">Informasi Kejadian</span>
                     </h4>
-                    <div class="row g-4">
+                    <div class="row g-4 align-items-stretch">
+                        <div class="col-12"></div>
                         @foreach ($mappings as $mapping)
                         <x-accident-information :title="$mapping['accident']" :total="$mapping['total']"
                             :category="$mapping['categories']" :icon="$mapping['icon']" />
@@ -55,7 +56,7 @@
                 </div>
 
                 <div class="col-lg-4 col-md-12 mt-4 mt-lg-0 px-4">
-                    <div class="row g-4">
+                    <div class="row g-4 align-items-stretch">
                         <x-accumulative-accident title="Monitoring Bulanan Total Akumulatif Accident"
                             icon="fa-solid fa-desktop" :months="$months" :accumulativeAccident="$accumulativeAccident"
                             chartId="accidentChart1" />
@@ -72,7 +73,7 @@
                             Periode <span class="badge bg-dark">{{ $month }}</span>
                         </h4>
                     </div>
-                    <div class="row g-4">
+                    <div class="row g-4 align-items-stretch">
                         <x-calender title="Legend" icon="fa-solid fa-calendar" :bulan="$calender['bulan']"
                             :tanggalList="$calender['tanggalList']" :days=" $calender['days']"
                             :offsetHariPertama="$calender['offsetHariPertama']" />
