@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Accident;
+use App\Models\AgcLevelHistory;
 use App\Models\CategoryAccident;
 use App\Models\Incident;
 use App\Services\MonitoringService;
@@ -52,5 +53,26 @@ class MainController extends Controller
         $service = new MonitoringService();
         $data = $service->monitoring();
         return view('monitoring', $data);
+    }
+
+    public function agc()
+    {
+        $user = Auth::user();
+        $now = Carbon::now();
+        $month = $now->month;
+        $year = $now->year;
+
+        $agcLevels = AgcLevelHistory::with('agc')
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->paginate(10);
+
+
+        $data = [
+            'agcLevels' => $agcLevels,
+            'now' => $now->format('F Y'),
+            'user' => $user
+        ];
+        return view('agc', $data);
     }
 }

@@ -15,8 +15,7 @@
     }
 </style>
 
-<nav class="navbar navbar-main navbar-expand-lg px-0 py-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
-    navbar-scroll="true">
+<nav class="navbar navbar-main navbar-expand-lg px-0 py-0 mx-4 shadow-none border-radius-xl" id="navbarBlur">
     <div class="container-fluid py-1 px-3 d-flex align-items-center justify-content-between flex-wrap">
 
         <div class="d-flex align-items-center">

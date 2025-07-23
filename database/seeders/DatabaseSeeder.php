@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             AccidentSeeder::class,
             CategoryAccidentSeeder::class,
+            AgcLevelSeeder::class,
         ]);
     }
 }

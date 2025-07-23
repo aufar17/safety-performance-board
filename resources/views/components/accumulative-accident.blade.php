@@ -39,7 +39,7 @@
                     </tbody>
                 </table>
             </div>
-            <canvas id="{{ $chartId }}" height="120"></canvas>
+            <canvas id="{{ $chartId }}" height="90"></canvas>
         </div>
     </div>
 </div>

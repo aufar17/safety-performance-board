@@ -17,6 +17,8 @@
 
             <x-navlink href="{{ route('accident') }}" :active="request()->is('accident')" icon="fa-globe">Accident
             </x-navlink>
+            <x-navlink href="{{ route('agc') }}" :active="request()->is('agc')" icon="fa-globe">AGC Level
+            </x-navlink>
 
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Monitoring</h6>

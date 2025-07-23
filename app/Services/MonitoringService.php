@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Accident;
+use App\Models\AgcLevel;
+use App\Models\AgcLevelHistory;
 use App\Models\Incident;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +23,7 @@ class MonitoringService
         $months = $this->months();
         $accumulativeAccident = $this->accumulativeAccident($year);
         $calender = $this->calendar();
+        $agc = $this->agc();
 
         return compact(
             'user',
@@ -31,7 +34,8 @@ class MonitoringService
             'mappings',
             'months',
             'accumulativeAccident',
-            'calender'
+            'agc',
+            'calender',
         );
     }
 
@@ -197,5 +201,15 @@ class MonitoringService
             'offsetHariPertama' => $offsetHariPertama,
             'days' => $days,
         ];
+    }
+
+    public function agc()
+    {
+        $now = Carbon::now()->format('m');
+        $agc = AgcLevelHistory::with('agc')
+            ->whereMonth('date', $now)
+            ->first();
+
+        return $agc;
     }
 }

@@ -36,11 +36,7 @@
                     </h5>
                 </div>
                 <div class="col-lg-4 col-md-12 text-center px-4">
-                    <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px; color:#347433;">Safety Calendar
-                    </h4>
-                    <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px;">
-                        Periode <span class="badge bg-dark">{{ $month }}</span>
-                    </h4>
+
                 </div>
             </div>
 
@@ -64,10 +60,18 @@
                             icon="fa-solid fa-desktop" :months="$months" :accumulativeAccident="$accumulativeAccident"
                             chartId="accidentChart1" />
 
-                        <x-statistic-information-k3 title="Informasi Statistik K3" icon="fa-solid fa-desktop" />
+                        <x-statistic-information-k3 title="Informasi Statistik K3" icon="fa-solid fa-desktop"
+                            :agc="$agc" />
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-12 mt-4 mt-lg-0 px-4">
+                    <div class="text-center">
+                        <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px; color:#347433;">Safety Calendar
+                        </h4>
+                        <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px;">
+                            Periode <span class="badge bg-dark">{{ $month }}</span>
+                        </h4>
+                    </div>
                     <div class="row g-4">
                         <x-calender title="Legend" icon="fa-solid fa-calendar" :bulan="$calender['bulan']"
                             :tanggalList="$calender['tanggalList']" :days=" $calender['days']"

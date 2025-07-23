@@ -23,7 +23,7 @@
 
 
     .calendar-grid>div {
-        min-height: 90px;
+        min-height: 80px;
     }
 
     .transition-all {
@@ -112,26 +112,39 @@ $legendCategory = [
 ];
 @endphp
 
-<div class="container text-center my-5">
-    <h5 class="mb-5">Legend</h5>
-
-    <div class="row row-cols-3 g-2 justify-content-center mb-3">
-        @foreach ($legendDay as $day)
-        <div class="col d-flex align-items-center justify-content-center gap-2 small">
-            <span class="rounded-circle {{ $day['color'] }}" style="width: 14px; height: 14px;"></span>
-            <span>{{ $day['label'] }}</span>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-3 d-flex align-items-center justify-content-center">
+            <h5 class="fw-bolder">Legend</h5>
         </div>
-        @endforeach
-    </div>
-    <hr>
+        <div class="col-9">
+            <div class="row row-cols-3 g-2 justify-content-center mb-3">
+                @foreach ($legendDay as $day)
+                <div class="col">
+                    <div class="card shadow-sm rounded-4 p-2">
+                        <div class="d-flex justify-content-between align-items-center small px-2">
+                            <span>{{ $day['label'] }}</span>
+                            <span class="rounded-circle {{ $day['color'] }}" style="width: 14px; height: 14px;"></span>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
 
-    <div class="row row-cols-3 g-2 justify-content-center">
-        @foreach ($legendCategory as $cat)
-        <div class="col d-flex align-items-center justify-content-center gap-2 small">
-            <i class="{{ $cat['icon'] }}"></i>
-            <span>{{ $cat['label'] }}</span>
+            <hr>
+
+            <div class="row row-cols-3 g-2 justify-content-center">
+                @foreach ($legendCategory as $cat)
+                <div class="col">
+                    <div class="card shadow-sm rounded-4 p-2">
+                        <div class="d-flex justify-content-between align-items-center small px-2">
+                            <span>{{ $cat['label'] }}</span>
+                            <i class="{{ $cat['icon'] }}"></i>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
         </div>
-        @endforeach
     </div>
-
 </div>
