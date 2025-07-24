@@ -14,11 +14,13 @@ class AgcLevelHistory extends Model
         'agc_level_id',
         'date',
         'fr',
-        'sr'
+        'sr',
+        'accident_hours',
     ];
 
     public function agc(): BelongsTo
-    {
+    {   
         return $this->belongsTo(AgcLevel::class, 'agc_level_id', 'id');
     }
 }
+    

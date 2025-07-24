@@ -285,7 +285,7 @@
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                @if ($incident->pica && $incident->pica->image->count())
+                @if ($incident->pica && $incident->pica->image->count() > 0)
                 <div class="p-3">
                     <div id="carouselPica{{ $incident->id }}" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
@@ -311,7 +311,14 @@
                         @endif
                     </div>
                 </div>
+                @else
+                <div class="p-5">
+                    <div class="text-center text-muted fw-bold fs-5">
+                        Tidak ada gambar untuk ditampilkan.
+                    </div>
+                </div>
                 @endif
+
 
             </div>
         </div>

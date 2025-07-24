@@ -206,10 +206,27 @@ class MonitoringService
     public function agc()
     {
         $now = Carbon::now()->format('m');
+
         $agc = AgcLevelHistory::with('agc')
             ->whereMonth('date', $now)
+            ->latest('id')
             ->first();
 
-        return $agc;
+        $latestLwd = Incident::where('category_id', 3)
+            ->latest('date')
+            ->first();
+
+        $sinceLwd = $latestLwd
+            ? floor(Carbon::parse($latestLwd->date)->floatDiffInDays(Carbon::now()))
+            : null;
+
+        if ($sinceLwd < 0) {
+            $sinceLwd = 0;
+        }
+
+        return [
+            'agc' => $agc,
+            'sinceLwd' => $sinceLwd,
+        ];
     }
 }

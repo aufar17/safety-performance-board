@@ -77,6 +77,7 @@
     </div>
 
     <div class="carousel-wrapper">
+        @if ($images && count($images) > 0)
         <div id="picaCarousel" class="carousel slide carousel-16by9" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="position-absolute top-0 start-0 m-3 info-box">
@@ -93,8 +94,7 @@
                 </div>
                 @endforeach
             </div>
-
-            @if ($images && count($images) > 1)
+            @if (count($images) > 1)
             <button class="carousel-control-prev" type="button" data-bs-target="#picaCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -105,7 +105,13 @@
             </button>
             @endif
         </div>
+        @else
+        <div class="text-center py-5 text-muted fw-bold fs-4">
+            Tidak ada gambar untuk ditampilkan.
+        </div>
+        @endif
     </div>
+
 
     <x-script />
 </body>

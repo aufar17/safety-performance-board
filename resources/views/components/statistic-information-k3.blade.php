@@ -1,7 +1,8 @@
 @props([
 'icon',
 'title',
-'agc'
+'agc',
+'sinceLwd',
 ])
 
 <div class="col-12">
@@ -30,7 +31,7 @@
             <div class="row g-3 mb-1">
                 <div class="col-lg-7">
                     <span class="text-center d-inline-block w-100 py-2 px-3 text-white  bg-dark">
-                        10
+                        {{ $sinceLwd ?? 0}}
                     </span>
                 </div>
                 <div class="col-lg-5">
@@ -57,7 +58,7 @@
             <div class="row g-3 mb-1">
                 <div class="col-lg-7">
                     <span class="text-center d-inline-block w-100 py-2 px-3 text-white bg-dark">
-                        10
+                        {{ $agc->accident_hours ?? 0 }}
                     </span>
                 </div>
                 <div class=" col-lg-5">

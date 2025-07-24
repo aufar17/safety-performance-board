@@ -40,6 +40,7 @@ class AgcLevelService
                 'date'         => $request->date,
                 'fr'           => $fr,
                 'sr'           => $sr,
+                'accident_hours'           => $request->accident_hours,
             ]);
 
             DB::commit();
@@ -61,7 +62,7 @@ class AgcLevelService
 
     public function update(Request $request): array
     {
-        $incident = Incident::where('id', $request->id)->first();
+        $agc = AgcLevelHistory::where('id', $request->id)->first();
         DB::beginTransaction();
         try {
             $lossday = $request->loss_day_fr;
@@ -81,11 +82,13 @@ class AgcLevelService
                 $matchedLevel = $frLevel ?? $srLevel;
             }
 
-            $incident->update([
+            $updateAgc =  $agc->update([
                 'agc_level_id' => $matchedLevel?->id,
                 'date'         => $request->date,
                 'fr'           => $fr,
                 'sr'           => $sr,
+                'accident_hours'  => $request->accident_hours,
+
             ]);
 
             DB::commit();
@@ -93,7 +96,7 @@ class AgcLevelService
             return [
                 'success' => true,
                 'message' => 'Data accident updated successfully.',
-                'data'    => $incident,
+                'data'    => $updateAgc,
             ];
         } catch (Exception $e) {
             DB::rollBack();

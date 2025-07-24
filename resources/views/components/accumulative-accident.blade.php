@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="card-body p-4">
-            <div class="table-responsive mb-3">
+            <div class="table-responsive mb-1">
                 <table class="table table-sm table-bordered table-striped mb-4" style="font-size: 12px;">
                     <thead class="table-danger">
                         <tr>

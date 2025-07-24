@@ -111,6 +111,11 @@
                             <input type="date" class="form-control" name="date" required>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="accident_hours" class="form-label">Total Accident Hours (Without LTI)</label>
+                            <input type="number" class="form-control" name="accident_hours" required>
+                        </div>
+
                         <div class="separator my-3 d-flex align-items-center text-muted">
                             <hr class="flex-grow-1">
                             <span class="px-3 small fw-bolder text-dark text-uppercase">Frequency Rate (FR)</span>
@@ -154,7 +159,7 @@
                             <button type="button" class="btn btn-outline-secondary px-4"
                                 data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-success">Save</button>
-                            <input type="hidden" name="agc_level_id" value="1">
+                            <input type="hidden" name="id" value="{{ $agc->id }}">
                         </div>
                     </form>
                 </div>
@@ -213,6 +218,12 @@
                         <div class="mb-3">
                             <label for="date" class="form-label">Date</label>
                             <input type="date" class="form-control" name="date" required>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="accident_hours" class="form-label">Total Accident Hours (Without LTI)</label>
+                            <input type="number" class="form-control" name="accident_hours" required>
                         </div>
 
                         <div class="separator my-3 d-flex align-items-center text-muted">

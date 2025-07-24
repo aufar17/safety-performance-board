@@ -18,6 +18,7 @@ class AgcLevel extends Model
         'fr_max',
         'sr_min',
         'sr_max',
+        'sr_max',
     ];
 
     public function agcHistory(): HasMany

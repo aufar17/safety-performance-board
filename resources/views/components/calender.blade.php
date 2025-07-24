@@ -67,12 +67,14 @@
     $incidentBgClass = $tanggal['bg'] ?? 'bg-light';
     @endphp
 
-    <div class="{{ $baseClass }} {{ $incidentBgClass }} {{ $timeBgClass }} position-relative clickable-day"
+    <div class="{{ $baseClass }} {{ $incidentBgClass }} {{ $timeBgClass }} position-relative {{ !empty($tanggal['categoryBadge']) ? 'clickable-day' : '' }}"
         data-date="{{ $tanggal['tanggal'] }}">
-
+        @if (!empty($tanggal['categoryBadge']))
         <a href="{{ route('pica', ['day' => $tanggal['tanggal']]) }}"
             class="stretched-link text-decoration-none text-reset">
         </a>
+        @endif
+
 
         @if (!empty($tanggal['categoryBadge']) && is_array($tanggal['categoryBadge']))
         <div class="position-absolute top-0 start-0 d-flex flex-column align-items-start p-1 gap-1" style="z-index: 3;">

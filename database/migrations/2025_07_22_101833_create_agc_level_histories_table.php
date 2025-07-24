@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->float('fr');
             $table->float('sr');
+            $table->float('accident_hours');
             $table->timestamps();
         });
     }
