@@ -35,7 +35,7 @@
                 </div>
                 <div class="col-lg-5">
                     <span class="text-center d-inline-block w-100 py-2 px-3 text-white  bg-dark">
-                        {{ $agc->fr }}
+                        {{ $agc->fr ?? 0}}
                     </span>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                 </div>
                 <div class=" col-lg-5">
                     <span class="text-center d-inline-block w-100 py-2 px-3 text-white bg-dark">
-                        {{ $agc->sr }}
+                        {{ $agc->sr ?? 0 }}
                     </span>
                 </div>
             </div>
@@ -80,8 +80,8 @@
 
                 <div class="col-5">
                     <div class="py-2 rounded-4 shadow hover-shadow-lg transition"
-                        style="background-color: {{ $agc->agc->color }}">
-                        <h5 class="text-white mb-0 text-uppercase fw-bold">{{ $agc->agc->category }}</h5>
+                        style="background-color: {{ $agc->agc->color ?? '#000000' }}">
+                        <h5 class="text-white mb-0 text-uppercase fw-bold">{{ $agc->agc->category ?? 'Unknown' }}</h5>
                     </div>
                 </div>
             </div>

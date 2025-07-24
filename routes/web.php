@@ -22,7 +22,6 @@ Route::get('accident', [MainController::class, 'accident'])->name('accident');
 Route::get('monitoring', [MainController::class, 'monitoring'])->name('monitoring');
 Route::get('agc', [MainController::class, 'agc'])->name('agc');
 
-
 //ACCIDENT FEATURES
 Route::post('accident-post', [AccidentController::class, 'accidentPost'])->name('accident-post');
 Route::post('accident-update', [AccidentController::class, 'accidentUpdate'])->name('accident-update');
@@ -35,6 +34,9 @@ Route::post('agc-delete', [AgcController::class, 'agcDelete'])->name('agc-delete
 
 //PICA FEATURES
 Route::get('pica/{day}', [PicaController::class, 'pica'])->name('pica');
+Route::post('pica-post', [PicaController::class, 'picaPost'])->name('pica-post');
+Route::post('pica-update', [PicaController::class, 'picaUpdate'])->name('pica-update');
+Route::post('pica-delete', [PicaController::class, 'picaDelete'])->name('pica-delete');
 
 
 

@@ -6,6 +6,7 @@ use App\Models\Accident;
 use App\Models\AgcLevelHistory;
 use App\Models\CategoryAccident;
 use App\Models\Incident;
+use App\Models\Pica;
 use App\Services\MonitoringService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class MainController extends Controller
         $month = $now->month;
         $year = $now->year;
 
-        $incidents = Incident::with('accident', 'category')
+        $incidents = Incident::with('accident', 'category', 'pica', 'pica.image')
             ->whereMonth('date', $month)
             ->whereYear('date', $year)
             ->paginate(10);

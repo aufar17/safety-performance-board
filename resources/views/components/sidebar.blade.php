@@ -15,7 +15,8 @@
         <ul class="navbar-nav">
             <x-navlink href="{{ route('index') }}" :active="request()->is('/') " icon="fa-house">Dashboard</x-navlink>
 
-            <x-navlink href="{{ route('accident') }}" :active="request()->is('accident')" icon="fa-globe">Accident
+            <x-navlink href="{{ route('accident') }}" :active="request()->is(['accident',
+            'pica-admin'])" icon="fa-globe">Accident
             </x-navlink>
             <x-navlink href="{{ route('agc') }}" :active="request()->is('agc')" icon="fa-globe">AGC Level
             </x-navlink>
