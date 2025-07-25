@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('agc_level_id');
             $table->date('date');
+            $table->integer('total_accident');
+            $table->integer('loss_day');
             $table->float('fr');
             $table->float('sr');
             $table->float('accident_hours');

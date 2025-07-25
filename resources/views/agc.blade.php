@@ -108,12 +108,13 @@
 
                         <div class="mb-3">
                             <label for="date" class="form-label">Date</label>
-                            <input type="date" class="form-control" name="date" required>
+                            <input type="date" class="form-control" name="date" value="{{ $agc->date }}" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="accident_hours" class="form-label">Total Accident Hours (Without LTI)</label>
-                            <input type="number" class="form-control" name="accident_hours" required>
+                            <input type="number" class="form-control" name="accident_hours"
+                                value="{{ $agc->accident_hours }}" required>
                         </div>
 
                         <div class="separator my-3 d-flex align-items-center text-muted">
@@ -124,17 +125,12 @@
 
                         <div class="mb-3">
                             <label for="total_accident" class="form-label">Total Accident</label>
-                            <input type="number" class="form-control" id="total_accident" name="total_accident"
-                                required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="work_time_fr" class="form-label">Total Work Time</label>
-                            <input type="number" class="form-control" id="work_time_fr" name="work_time_fr" required>
+                            <input type="number" class="form-control" id="total_accident"
+                                value="{{ $agc->total_accident }}" name="total_accident" required>
                         </div>
                         <div class="mb-3">
                             <label for="fr" class="form-label">FR</label>
-                            <input id="fr" type="number" class="form-control" name="fr" readonly>
+                            <input id="fr" type="number" class="form-control" name="fr" value="{{ $agc->fr }}" readonly>
                         </div>
 
                         <div class="separator my-3 d-flex align-items-center text-muted">
@@ -143,16 +139,13 @@
                             <hr class="flex-grow-1">
                         </div>
                         <div class="mb-3">
-                            <label for="loss_day_fr" class="form-label">Loss Day</label>
-                            <input type="number" class="form-control" id="loss_day_fr" name="loss_day_fr" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="work_time_sr" class="form-label">Total Work Time</label>
-                            <input type="number" class="form-control" id="work_time_sr" name="work_time_sr" required>
+                            <label for="loss_day" class="form-label">Loss Day</label>
+                            <input type="number" class="form-control" id="loss_day" name="loss_day"
+                                value="{{ $agc->loss_day }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="sr" class="form-label">SR</label>
-                            <input type="number" id="sr" class="form-control" name="sr" readonly>
+                            <input type="number" id="sr" class="form-control" name="sr" value="{{ $agc->sr }}" readonly>
                         </div>
 
                         <div class="modal-footer">
@@ -238,10 +231,6 @@
                                 required>
                         </div>
                         <div class="mb-3">
-                            <label for="work_time_fr" class="form-label">Total Work Time</label>
-                            <input type="number" class="form-control" id="work_time_fr" name="work_time_fr" required>
-                        </div>
-                        <div class="mb-3">
                             <label for="fr" class="form-label">FR</label>
                             <input id="fr" type="number" class="form-control" name="fr" readonly>
                         </div>
@@ -252,13 +241,8 @@
                             <hr class="flex-grow-1">
                         </div>
                         <div class="mb-3">
-                            <label for="loss_day_fr" class="form-label">Loss Day</label>
-                            <input type="number" class="form-control" id="loss_day_fr" name="loss_day_fr" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="work_time_sr" class="form-label">Total Work Time</label>
-                            <input type="number" class="form-control" id="work_time_sr" name="work_time_sr" required>
+                            <label for="loss_day" class="form-label">Loss Day</label>
+                            <input type="number" class="form-control" id="loss_day" name="loss_day" required>
                         </div>
                         <div class="mb-3">
                             <label for="sr" class="form-label">SR</label>
@@ -291,29 +275,29 @@
             function calculateFR(el) {
         const container = el.closest('form');
         const totalAccident = parseFloat(container.querySelector('[name="total_accident"]').value) || 0;
-        const workTime = parseFloat(container.querySelector('[name="work_time_fr"]').value) || 0;
+        const accidentHours = parseFloat(container.querySelector('[name="accident_hours"]').value) || 0;
 
-        const fr = (workTime > 0) ? (totalAccident / workTime) * 1000000 : 0;
+        const fr = (accidentHours > 0) ? (totalAccident / accidentHours) * 1000000 : 0;
         container.querySelector('[name="fr"]').value = fr.toFixed(2);
     }
 
     function calculateSR(el) {
         const container = el.closest('form');
-        const lossDay = parseFloat(container.querySelector('[name="loss_day_fr"]').value) || 0;
-        const workTime = parseFloat(container.querySelector('[name="work_time_sr"]').value) || 0;
+        const lossDay = parseFloat(container.querySelector('[name="loss_day"]').value) || 0;
+        const accidentHours = parseFloat(container.querySelector('[name="accident_hours"]').value) || 0;
 
-        const sr = (workTime > 0) ? (lossDay / workTime) * 1000000 : 0;
+        const sr = (accidentHours > 0) ? (lossDay / accidentHours) * 1000000 : 0;
         container.querySelector('[name="sr"]').value = sr.toFixed(2);
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('[name="total_accident"], [name="work_time_fr"]').forEach(input => {
+        document.querySelectorAll('[name="total_accident"], [name="accident_hours"]').forEach(input => {
             input.addEventListener('input', function () {
                 calculateFR(this);
             });
         });
 
-        document.querySelectorAll('[name="loss_day_fr"], [name="work_time_sr"]').forEach(input => {
+        document.querySelectorAll('[name="loss_day"], [name="accident_hours"]').forEach(input => {
             input.addEventListener('input', function () {
                 calculateSR(this);
             });

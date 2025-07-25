@@ -5,6 +5,45 @@
 'sinceLwd',
 ])
 
+
+<style>
+    .futuristic-card {
+        padding: 0.5rem 0.5rem;
+        border-radius: 12px;
+        box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.3),
+            inset 0 0 6px rgba(255, 255, 255, 0.1),
+            0 0 8px rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(4px);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .futuristic-card:hover {
+        transform: translateY(-3px);
+        box-shadow:
+            0 6px 20px rgba(0, 0, 0, 0.4),
+            inset 0 0 8px rgba(255, 255, 255, 0.15),
+            0 0 14px rgba(255, 255, 255, 0.1);
+    }
+
+    .futuristic-title {
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-weight: bold;
+        margin: 0;
+        text-align: center;
+        text-shadow:
+            0 0 3px rgba(255, 255, 255, 0.3),
+            0 0 6px rgba(255, 255, 255, 0.2);
+    }
+</style>
+
+
 <div class="col-12">
     <div class="card shadow-sm rounded">
         <div class="card-header py-3 bg-danger border-bottom">
@@ -68,7 +107,7 @@
                 </div>
             </div>
 
-            <div class="row g-3 align-items-center text-center">
+            <div class="row g-2 align-items-center text-center">
                 <div class="col-3 text-end">
                     <img src="{{ asset('img/k3.png') }}" alt="K3" class="img-fluid"
                         style="max-width: 70px; height: auto;">
@@ -80,10 +119,12 @@
                 </div>
 
                 <div class="col-5">
-                    <div class="py-2 rounded-4 shadow hover-shadow-lg transition"
-                        style="background-color: {{ $agc->agc->color ?? '#000000' }}">
-                        <h5 class="text-white mb-0 text-uppercase fw-bold">{{ $agc->agc->category ?? 'Unknown' }}</h5>
+                    <div class="futuristic-card" style="background-color: {{ $agc->agc->color ?? '#000000' }}">
+                        <h3 class="futuristic-title">
+                            {{ $agc->agc->category ?? 'Unknown' }}
+                        </h3>
                     </div>
+
                 </div>
             </div>
 

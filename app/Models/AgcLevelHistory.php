@@ -13,14 +13,15 @@ class AgcLevelHistory extends Model
     protected $fillable = [
         'agc_level_id',
         'date',
+        'total_accident',
+        'loss_day',
         'fr',
         'sr',
         'accident_hours',
     ];
 
     public function agc(): BelongsTo
-    {   
+    {
         return $this->belongsTo(AgcLevel::class, 'agc_level_id', 'id');
     }
 }
-    

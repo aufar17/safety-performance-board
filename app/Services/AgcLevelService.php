@@ -18,13 +18,12 @@ class AgcLevelService
     {
         DB::beginTransaction();
         try {
-            $lossday = $request->loss_day_fr;
-            $work_time_fr = $request->work_time_fr;
-            $work_time_sr = $request->work_time_sr;
+            $lossday = $request->loss_day;
             $total_accident = $request->total_accident;
+            $accident_hours = $request->accident_hours;
 
-            $fr = ($total_accident / $work_time_fr) * 1000000;
-            $sr = ($lossday / $work_time_sr) * 1000000;
+            $fr = ($total_accident / $accident_hours) * 1000000;
+            $sr = ($lossday / $accident_hours) * 1000000;
 
             $frLevel = AgcLevel::matchFr($fr)->first();
             $srLevel = AgcLevel::matchSr($sr)->first();
@@ -38,9 +37,11 @@ class AgcLevelService
             $agcHistory = AgcLevelHistory::create([
                 'agc_level_id' => $matchedLevel?->id,
                 'date'         => $request->date,
+                'total_accident'           => $total_accident,
+                'loss_day'           => $request->loss_day,
                 'fr'           => $fr,
                 'sr'           => $sr,
-                'accident_hours'           => $request->accident_hours,
+                'accident_hours'           => $accident_hours,
             ]);
 
             DB::commit();
@@ -52,6 +53,7 @@ class AgcLevelService
             ];
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e);
             return [
                 'success' => false,
                 'message' => 'Failed to save data accident.',
@@ -65,13 +67,11 @@ class AgcLevelService
         $agc = AgcLevelHistory::where('id', $request->id)->first();
         DB::beginTransaction();
         try {
-            $lossday = $request->loss_day_fr;
-            $work_time_fr = $request->work_time_fr;
-            $work_time_sr = $request->work_time_sr;
+            $lossday = $request->loss_day;
             $total_accident = $request->total_accident;
 
-            $fr = ($total_accident / $work_time_fr) * 1000000;
-            $sr = ($lossday / $work_time_sr) * 1000000;
+            $fr = ($total_accident / $total_accident) * 1000000;
+            $sr = ($lossday / $total_accident) * 1000000;
 
             $frLevel = AgcLevel::matchFr($fr)->first();
             $srLevel = AgcLevel::matchSr($sr)->first();
@@ -85,6 +85,8 @@ class AgcLevelService
             $updateAgc =  $agc->update([
                 'agc_level_id' => $matchedLevel?->id,
                 'date'         => $request->date,
+                'total_accident'           => $total_accident,
+                'loss_day'           => $request->loss_day,
                 'fr'           => $fr,
                 'sr'           => $sr,
                 'accident_hours'  => $request->accident_hours,
