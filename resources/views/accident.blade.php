@@ -211,7 +211,7 @@
                         <div class="mb-3">
                             <label for="email" class="form-label">Description</label>
                             <textarea class="form-control" name="description" id="description" cols="20"
-                                rows="2"></textarea>
+                                rows="2">{{ $incident->description }}</textarea>
                         </div>
 
                         <div class="modal-footer">
