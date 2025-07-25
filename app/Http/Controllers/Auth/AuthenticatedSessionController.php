@@ -27,19 +27,37 @@ class AuthenticatedSessionController extends Controller
 
             $otp = rand(100000, 999999);
             session(['otp_code' => $otp, 'otp_verified' => false]);
+
             $hp = Hp::where('npk', $user->npk)->first()->hp;
 
-            OtpVerification::create([
-                'id_user'    => Auth::user()->id,
-                'otp'       => $otp,
-                'hp'       => $hp,
-                'expiry_date' => Carbon::now()->addMinutes(5),
-                'send' => 'queue',
-                'send_date' => null,
-                'use' => false,
-                'use_date' => null,
-            ]);
+            $existingOtp = OtpVerification::where('id_user', $user->id)
+                ->where('expiry_date', '<', now())
+                ->where('use', false)
+                ->latest()
+                ->first();
 
+            if ($existingOtp) {
+                $existingOtp->update([
+                    'otp' => $otp,
+                    'hp' => $hp,
+                    'expiry_date' => now()->addMinutes(5),
+                    'send' => 'queue',
+                    'send_date' => null,
+                    'use' => false,
+                    'use_date' => null,
+                ]);
+            } else {
+                OtpVerification::create([
+                    'id_user'    => $user->id,
+                    'otp'        => $otp,
+                    'hp'         => $hp,
+                    'expiry_date' => now()->addMinutes(5),
+                    'send'       => 'queue',
+                    'send_date'  => null,
+                    'use'        => false,
+                    'use_date'   => null,
+                ]);
+            }
 
             return redirect()->route('otp-verif');
         }
