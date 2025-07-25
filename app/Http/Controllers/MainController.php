@@ -22,16 +22,17 @@ class MainController extends Controller
         ];
         return view('index', $data);
     }
-    public function accident()
+    public function accident(Request $request)
     {
         $user = Auth::user();
         $now = Carbon::now();
-        $month = $now->month;
-        $year = $now->year;
 
+        $filterMonthYear = $request->input('filterMonthYear', $now->format('Y-m'));
+        [$year, $month] = explode('-', $filterMonthYear);
+        $carbonMonth = Carbon::createFromDate($year, $month, 1);
         $incidents = Incident::with('accident', 'category', 'pica', 'pica.image')
-            ->whereMonth('date', $month)
             ->whereYear('date', $year)
+            ->whereMonth('date', $month)
             ->paginate(10);
 
         $accidents = Accident::all();
@@ -41,12 +42,15 @@ class MainController extends Controller
             'incidents' => $incidents,
             'accidents' => $accidents,
             'categories' => $categories,
-            'now' => $now->format('F Y'),
+            'month' => $carbonMonth->format('F'),
+            'year' => $year,
+            'now' => Carbon::createFromDate($year, $month)->format('F Y'),
             'user' => $user
         ];
 
         return view('accident', $data);
     }
+
 
     public function monitoring()
     {
@@ -56,12 +60,13 @@ class MainController extends Controller
         return view('monitoring', $data);
     }
 
-    public function agc()
+    public function agc(Request $request)
     {
         $user = Auth::user();
         $now = Carbon::now();
-        $month = $now->month;
-        $year = $now->year;
+        $filterMonthYear = $request->input('filterMonthYear', $now->format('Y-m'));
+        [$year, $month] = explode('-', $filterMonthYear);
+        $carbonMonth = Carbon::createFromDate($year, $month, 1);
 
         $agcLevels = AgcLevelHistory::with('agc')
             ->whereMonth('date', $month)
@@ -71,6 +76,8 @@ class MainController extends Controller
 
         $data = [
             'agcLevels' => $agcLevels,
+            'month' => $carbonMonth->format('F'),
+            'year' => $year,
             'now' => $now->format('F Y'),
             'user' => $user
         ];

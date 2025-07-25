@@ -21,7 +21,8 @@
 <body class="g-sidenav-show bg-gray-100 d-flex flex-column min-vh-100">
     <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg">
         <x-navbar-monitoring title="Dashboard" breadcumb="Dashboard" />
-        <div class="container-fluid pb-4">
+        <div class="container-fluid pb-2
+        ">
             <h2 class="text-center text-uppercase mb-4" style="letter-spacing: 2px;">Safety Performance Board</h2>
 
             <div class="row align-items-start gy-2">

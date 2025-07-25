@@ -15,6 +15,7 @@ class Incident extends Model
         'accident_id',
         'category_id',
         'date',
+        'description',
     ];
 
 

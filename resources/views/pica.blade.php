@@ -5,15 +5,16 @@
 <style>
     html,
     body {
-        background-color: #f8f9fa;
+        background-color: #FFEDFA;
         padding: 0;
         margin: 0;
     }
 
     .carousel-wrapper {
         width: 95%;
-        max-width: 1200px;
+        max-width: 1300px;
         margin: 1rem auto;
+
     }
 
     h1.text-center {
@@ -72,7 +73,7 @@
 <body>
     <div class="row my-5">
         <div class="col-12">
-            <h2 class="text-center">PICA {{ $accidentDate }}</h2>
+            <h2 class="text-center text-black">PICA {{ $accidentDate }}</h2>
         </div>
     </div>
 
@@ -88,6 +89,10 @@
                 <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
                     <img src="{{ asset('storage/' . $img->image) }}" alt="Slide {{ $key + 1 }}">
 
+                    <div class="position-absolute bottom-0 start-0 m-3 info-box">
+                        <span class="fw-bolder">Description :</span> <br>
+                        {{$incident->description}}
+                    </div>
                     <div class="position-absolute bottom-0 end-0 m-3 info-box">
                         Slide {{ $key + 1 }} dari {{ count($images) }}
                     </div>
@@ -106,8 +111,8 @@
             @endif
         </div>
         @else
-        <div class="text-center py-5 text-muted fw-bold fs-4">
-            Tidak ada gambar untuk ditampilkan.
+        <div class="text-center py-5 text-black fw-bold fs-4">
+            Tidak ada PICA untuk ditampilkan.
         </div>
         @endif
     </div>

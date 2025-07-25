@@ -41,7 +41,7 @@
     <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
         <x-navbar title="Accident" breadcumb="Accident" :user="$user" />
         <div class="container-fluid p-5">
-            <x-card title="{{ $now }} Accident" icon="fa-solid fa-person-falling">
+            <x-card title="{{ $month }} {{ $year }} Accident" icon="fa-solid fa-person-falling">
                 @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
@@ -54,6 +54,17 @@
                     New Accident
                 </button>
 
+                <div class="row mb-3 align-items-end">
+                    <div class="col-sm-2">
+                        <label for="filterMonthYear" class="form-label">PERIODE</label>
+                        <form action="{{ route('accident') }}" method="GET">
+                            <input type="month" name="filterMonthYear"
+                                value="{{ request('filterMonthYear',  now()->format('Y-m')), }}"
+                                class="form-control form-control-sm" onchange="this.form.submit()">
+                        </form>
+                    </div>
+                </div>
+
                 <div class="table-responsive">
                     <table id="accident" class="table table-bordered table-striped table-hover">
                         <thead>
@@ -61,6 +72,7 @@
                                 <th>No</th>
                                 <th>Accident</th>
                                 <th>Category</th>
+                                <th>Description</th>
                                 <th>Date</th>
                                 <th>PICA</th>
                                 <th>Action</th>
@@ -72,6 +84,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $incident->accident->accident }}</td>
                                 <td>{{ $incident->category->category }}</td>
+                                <td>{{ $incident->description }}</td>
                                 <td>{{ $incident->date }}</td>
                                 <td>
                                     <button class="badge bg-success border-0" data-bs-toggle="modal"
@@ -134,6 +147,11 @@
                             <input type="date" class="form-control" id="date" name="date" placeholder="Accident Date"
                                 required>
                         </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Description</label>
+                            <textarea class="form-control" name="description" id="description" cols="20"
+                                rows="2"></textarea>
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
@@ -188,6 +206,12 @@
                         <div class="mb-3">
                             <label for="date" class="form-label">Date</label>
                             <input type="date" class="form-control" name="date" value="{{ $incident->date }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Description</label>
+                            <textarea class="form-control" name="description" id="description" cols="20"
+                                rows="2"></textarea>
                         </div>
 
                         <div class="modal-footer">

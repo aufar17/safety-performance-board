@@ -41,7 +41,7 @@
     <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
         <x-navbar title="AGC Level" breadcumb="AGC Level" :user="$user" />
         <div class="container-fluid p-5">
-            <x-card title="{{ $now }} AGC Level" icon="fa-solid fa-turn-up">
+            <x-card title="{{ $month }} {{ $year }} AGC Level" icon="fa-solid fa-turn-up">
                 @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
@@ -53,6 +53,16 @@
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newAgcModal">
                     New Data
                 </button>
+                <div class="row mb-3 align-items-end">
+                    <div class="col-sm-2">
+                        <label for="filterMonthYear" class="form-label">PERIODE</label>
+                        <form action="{{ route('agc') }}" method="GET">
+                            <input type="month" name="filterMonthYear"
+                                value="{{ request('filterMonthYear',  now()->format('Y-m')), }}"
+                                class="form-control form-control-sm" onchange="this.form.submit()">
+                        </form>
+                    </div>
+                </div>
 
                 <div class="table-responsive">
                     <table id="agc" class="table table-bordered table-striped table-hover">

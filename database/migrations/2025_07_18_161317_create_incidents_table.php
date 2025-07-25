@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('accident_id');
             $table->integer('category_id');
             $table->date('date');
+            $table->string('description');
             $table->timestamps();
         });
     }

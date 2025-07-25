@@ -21,6 +21,7 @@ class AccidentService
                 'accident_id' => $request->accident,
                 'category_id' => $request->category,
                 'date'     => $request->date,
+                'description'     => $request->description,
             ]);
 
             $pica = Pica::create([
@@ -53,6 +54,7 @@ class AccidentService
                 'accident_id' => $request->accident,
                 'category_id' => $request->category,
                 'date' => $request->date,
+                'description'     => $request->description,
             ]);
 
             DB::commit();
