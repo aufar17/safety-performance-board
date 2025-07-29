@@ -159,12 +159,12 @@
                         <div class="mb-3">
                             <label for="email" class="form-label">Date Start</label>
                             <input type="date" class="form-control" id="date_start" name="date_start"
-                                placeholder="Date Start" required>
+                                placeholder="Date Start" value="{{ $pica->date_start }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Date End</label>
                             <input type="date" class="form-control" id="date_end" name="date_end" placeholder="Date End"
-                                required>
+                                value="{{ $pica->date_end }}" required>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">

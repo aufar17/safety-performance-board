@@ -23,6 +23,7 @@ class AccidentService
                 'date'     => $request->date,
                 'description'     => $request->description,
             ]);
+            // dd($incident);
 
             DB::commit();
 
@@ -33,6 +34,7 @@ class AccidentService
             ];
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
 
             return [
                 'success' => false,

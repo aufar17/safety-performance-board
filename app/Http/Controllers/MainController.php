@@ -30,7 +30,7 @@ class MainController extends Controller
         $filterMonthYear = $request->input('filterMonthYear', $now->format('Y-m'));
         [$year, $month] = explode('-', $filterMonthYear);
         $carbonMonth = Carbon::createFromDate($year, $month, 1);
-        $incidents = Incident::with('accident', 'category', 'pica', 'pica.image')
+        $incidents = Incident::with('accident', 'category')
             ->whereYear('date', $year)
             ->whereMonth('date', $month)
             ->paginate(10);

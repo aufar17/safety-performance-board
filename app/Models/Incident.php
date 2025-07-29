@@ -28,8 +28,4 @@ class Incident extends Model
     {
         return $this->belongsTo(Accident::class, 'accident_id', 'id');
     }
-    public function pica(): BelongsTo
-    {
-        return $this->belongsTo(Pica::class, 'id', 'incident_id');
-    }
 }

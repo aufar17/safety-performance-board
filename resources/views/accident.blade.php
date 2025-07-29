@@ -252,7 +252,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="picaModal{{ $incident->id }}" tabindex="-1"
+    {{-- <div class="modal fade" id="picaModal{{ $incident->id }}" tabindex="-1"
         aria-labelledby="picaModalLabel{{ $incident->id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content shadow-sm border-0">
@@ -288,7 +288,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
     @endforeach
 
     <x-script></x-script>
