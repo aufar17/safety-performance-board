@@ -109,7 +109,7 @@
 
             <div class="row g-2 align-items-center text-center">
                 <div class="col-3 text-end">
-                    <img src="{{ asset('img/k3.png') }}" alt="K3" class="img-fluid"
+                    <img src="{{ asset('img/astra-green.png') }}" alt="K3" class="img-fluid"
                         style="max-width: 70px; height: auto;">
                 </div>
 

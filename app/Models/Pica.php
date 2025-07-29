@@ -11,13 +11,11 @@ class Pica extends Model
     protected $connection = 'mysql';
     protected $table = 'picas';
     protected $fillable = [
-        'incident_id',
+        'date_start',
+        'date_end',
     ];
 
-    public function incident(): BelongsTo
-    {
-        return $this->belongsTo(Incident::class, 'incident_id', 'id');
-    }
+
     public function image(): HasMany
     {
         return $this->hasMany(PicaImage::class, 'pica_id', 'id');

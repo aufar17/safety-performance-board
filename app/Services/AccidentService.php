@@ -24,16 +24,12 @@ class AccidentService
                 'description'     => $request->description,
             ]);
 
-            $pica = Pica::create([
-                'incident_id' => $incident->id,
-            ]);
-
             DB::commit();
 
             return [
                 'success' => true,
                 'message' => 'Data accident saved successfully.',
-                'data'    => [$incident, $pica],
+                'data'    => [$incident],
             ];
         } catch (Exception $e) {
             DB::rollBack();

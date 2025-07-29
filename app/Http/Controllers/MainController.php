@@ -83,4 +83,29 @@ class MainController extends Controller
         ];
         return view('agc', $data);
     }
+
+    public function picaAdmin(Request $request)
+    {
+        $user = Auth::user();
+        $now = Carbon::now();
+
+        $filterMonthYear = $request->input('filterMonthYear', $now->format('Y-m'));
+        [$year, $month] = explode('-', $filterMonthYear);
+        $carbonMonth = Carbon::createFromDate($year, $month, 1);
+        $picas = Pica::with('image')
+            ->whereYear('date_start', $year)
+            ->whereMonth('date_start', $month)
+            ->paginate(10);
+
+
+        $data = [
+            'picas' => $picas,
+            'month' => $carbonMonth->format('F'),
+            'year' => $year,
+            'now' => Carbon::createFromDate($year, $month)->format('F Y'),
+            'user' => $user
+        ];
+
+        return view('pica-admin', $data);
+    }
 }

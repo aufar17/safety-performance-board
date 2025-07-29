@@ -25,12 +25,16 @@
             </a>
         </div>
 
-        <div class="flex-grow-1 mx-5 py-3 text-center d-none d-lg-block" style="background-color: #347433">
+        <div class="flex-grow-1 mx-4 py-3 text-center d-none d-lg-block" style="background-color: #347433">
             <h2 class="mb-0 fw-bold text-white" style="letter-spacing: 2px;">PT KAYABA INDONESIA</h2>
         </div>
 
         <div class="d-flex align-items-center">
-            <span class="px-3 py-2 me-3">
+            <span class="py-2 me-4 ">
+                <img src="{{ asset('img/add-logo.png') }}" alt="K3" class="img-fluid"
+                    style="max-width: 70px; height: auto;">
+            </span>
+            <span class="py-2 me-3">
                 <img src="{{ asset('img/k3.png') }}" alt="K3" class="img-fluid" style="max-width: 70px; height: auto;">
             </span>
 

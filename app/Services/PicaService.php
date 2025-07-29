@@ -23,8 +23,35 @@ class PicaService
         DB::beginTransaction();
 
         try {
-            $pica = Pica::where('incident_id', $request->incident_id)->first();
 
+            $createPica = Pica::create([
+                'date_start' => $request->date_start,
+                'date_end' => $request->date_end,
+            ]);
+
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => 'Data pica saved successfully.',
+                'data'    => $createPica,
+            ];
+        } catch (Exception $e) {
+            DB::rollBack();
+            return [
+                'success' => false,
+                'message' => 'Failed to save data pica.',
+                'error'   => $e->getMessage(),
+            ];
+        }
+    }
+    public function postImage(Request $request): array
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $pica = Pica::where('id', $request->pica_id)->first();
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
@@ -41,7 +68,7 @@ class PicaService
 
             return [
                 'success' => true,
-                'message' => 'Data accident saved successfully.',
+                'message' => 'Data pica saved successfully.',
                 'data'    => $pica,
             ];
         } catch (Exception $e) {
@@ -50,7 +77,7 @@ class PicaService
 
             return [
                 'success' => false,
-                'message' => 'Failed to save data accident.',
+                'message' => 'Failed to save data pica.',
                 'error'   => $e->getMessage(),
             ];
         }
@@ -58,21 +85,19 @@ class PicaService
 
     public function update(Request $request): array
     {
-        $incident = Pica::where('id', $request->id)->first();
+        $pica = Pica::where('id', $request->id)->first();
         DB::beginTransaction();
         try {
-            $incident->update([
-                'accident_id' => $request->accident,
-                'category_id' => $request->category,
-                'date' => $request->date,
+            $update = $pica->update([
+                'date_start' => $request->date_start,
+                'date_end' => $request->date_end,
             ]);
-
             DB::commit();
 
             return [
                 'success' => true,
                 'message' => 'Data accident updated successfully.',
-                'data'    => $incident,
+                'data'    => $update,
             ];
         } catch (Exception $e) {
             DB::rollBack();
@@ -86,24 +111,48 @@ class PicaService
     }
     public function delete(Request $request): array
     {
-        $incident = Pica::where('id', $request->id)->first();
+        $pica = Pica::where('id', $request->id)->first();
         DB::beginTransaction();
         try {
-            $incident->delete();
+            $pica->delete();
 
             DB::commit();
 
             return [
                 'success' => true,
-                'message' => 'Data accident deleted successfully.',
-                'data'    => $incident,
+                'message' => 'Data pica deleted successfully.',
+                'data'    => $pica,
             ];
         } catch (Exception $e) {
             DB::rollBack();
 
             return [
                 'success' => false,
-                'message' => 'Failed to delete data accident.',
+                'message' => 'Failed to delete data pica.',
+                'error'   => $e->getMessage(),
+            ];
+        }
+    }
+    public function deleteImages(Request $request): array
+    {
+        $pica = PicaImage::where('id', $request->id)->first();
+        DB::beginTransaction();
+        try {
+            $pica->delete();
+
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => 'Pica image deleted successfully.',
+                'data'    => $pica,
+            ];
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return [
+                'success' => false,
+                'message' => 'Failed to delete Pica image.',
                 'error'   => $e->getMessage(),
             ];
         }

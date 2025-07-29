@@ -6,6 +6,7 @@ use App\Models\Accident;
 use App\Models\AgcLevel;
 use App\Models\AgcLevelHistory;
 use App\Models\Incident;
+use App\Models\Pica;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -133,6 +134,8 @@ class MonitoringService
         $carbon = Carbon::now()->locale('id');
         $bulan = $carbon->translatedFormat('F Y');
 
+        $picaList = Pica::all();
+
         $incidentList = Incident::with(['accident', 'category'])
             ->whereMonth('date', $carbon->month)
             ->whereYear('date', $carbon->year)
@@ -177,6 +180,12 @@ class MonitoringService
                 }
             }
 
+            $matchingPica = $picaList->first(function ($pica) use ($tanggal) {
+                $start = Carbon::parse($pica->date_start)->startOfDay();
+                $end = Carbon::parse($pica->date_end)->endOfDay();
+
+                return $tanggal->between($start, $end, true);
+            });
 
             $tanggalList[] = [
                 'tanggal' => $tanggal->format('Y-m-d'),
@@ -185,6 +194,7 @@ class MonitoringService
                 'status' => $tanggal->isToday() ? 'today' : ($tanggal->isPast() ? 'past' : 'future'),
                 'bg' => $bgClass,
                 'categoryBadge' => $categoryBadge,
+                'pica' => $matchingPica?->id
             ];
         }
 

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('picas', function (Blueprint $table) {
             $table->id();
-            $table->integer('incident_id');
+            $table->date('date_start');
+            $table->date('date_end')->nullable();
             $table->timestamps();
         });
     }

@@ -69,7 +69,7 @@
 
     <div class="{{ $baseClass }} {{ $incidentBgClass }} {{ $timeBgClass }} position-relative {{ !empty($tanggal['categoryBadge']) ? 'clickable-day' : '' }}"
         data-date="{{ $tanggal['tanggal'] }}">
-        @if (!empty($tanggal['categoryBadge']))
+        @if (!empty($tanggal['pica']))
         <a href="{{ route('pica', ['day' => $tanggal['tanggal']]) }}"
             class="stretched-link text-decoration-none text-reset">
         </a>

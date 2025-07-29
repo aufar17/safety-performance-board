@@ -70,29 +70,34 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Accident</th>
-                                <th>Category</th>
-                                <th>Description</th>
-                                <th>Date</th>
+                                <th>Date Start</th>
+                                <th>Date End</th>
+                                <th>PICA</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($incidents as $incident)
+                            @forelse ($picas as $pica)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $incident->accident->accident }}</td>
-                                <td>{{ $incident->category->category }}</td>
-                                <td>{{ $incident->description }}</td>
-                                <td>{{ $incident->date }}</td>
+                                <td>{{ $pica->date_start }}</td>
+                                <td>{{ $pica->date_end }}</td>
+                                <td>
+                                    <button class="badge bg-success border-0" data-bs-toggle="modal"
+                                        data-bs-target="#picaAccidentModal{{ $pica->id }}">Lihat Pica</button>
+                                </td>
                                 <td>
                                     <button class="badge bg-warning border-0" data-bs-toggle="modal"
-                                        data-bs-target="#editAccidentModal{{ $incident->id }}">
+                                        data-bs-target="#editAccidentModal{{ $pica->id }}">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
                                     <button class="badge bg-danger border-0" data-bs-toggle="modal"
-                                        data-bs-target="#deleteAccidentModal{{ $incident->id }}">
+                                        data-bs-target="#deleteAccidentModal{{ $pica->id }}">
                                         <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                    <button class="badge bg-info border-0" data-bs-toggle="modal"
+                                        data-bs-target="#picaModal{{ $pica->id }}">
+                                        <i class="fa-solid fa-info"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -113,35 +118,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('accident-post') }}" method="POST">
+                    <form action="{{ route('pica-post') }}" method="POST">
                         @csrf
+
                         <div class="mb-3">
-                            <label for="nama" class="form-label">Accident</label>
-                            <select name="accident" class="form-select" id="accident" required>
-                                <option disabled selected>-- Choose Accident --</option>
-                                @foreach ($accidents as $accident)
-                                <option value="{{ $accident->id }}">{{ $accident->accident }}</option>
-                                @endforeach
-                            </select>
+                            <label for="email" class="form-label">Date Start</label>
+                            <input type="date" class="form-control" id="date_start" name="date_start"
+                                placeholder="Date Start" required>
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Category</label>
-                            <select name="category" class="form-select" id="category" required>
-                                <option disabled selected>-- Choose Category --</option>
-                                @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->category }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Date</label>
-                            <input type="date" class="form-control" id="date" name="date" placeholder="Accident Date"
+                            <label for="email" class="form-label">Date End</label>
+                            <input type="date" class="form-control" id="date_end" name="date_end" placeholder="Date End"
                                 required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Description</label>
-                            <textarea class="form-control" name="description" id="description" cols="20"
-                                rows="2"></textarea>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -154,9 +142,9 @@
         </div>
     </div>
 
-    @foreach ($incidents as $incident)
-    <div class="modal fade" id="editAccidentModal{{ $incident->id }}" tabindex="-1"
-        aria-labelledby="editAccidentModalLabel{{ $incident->id }}" aria-hidden="true">
+    @foreach ($picas as $pica)
+    <div class="modal fade" id="editAccidentModal{{ $pica->id }}" tabindex="-1"
+        aria-labelledby="editAccidentModalLabel{{ $pica->id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-warning">
@@ -164,52 +152,25 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('accident-update') }}" method="POST">
+                    <form action="{{ route('pica-update') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="id" value="{{ $incident->id }}">
+                        <input type="hidden" name="id" value="{{ $pica->id }}">
 
                         <div class="mb-3">
-                            <label for="accident" class="form-label">Accident</label>
-                            <select name="accident" class="form-select" required>
-                                <option disabled>-- Choose Accident --</option>
-                                @foreach ($accidents as $accident)
-                                <option value="{{ $accident->id }}" {{ $incident->accident == $accident->accident
-                                    ? 'selected' : '' }}>
-                                    {{ $accident->accident }}
-                                </option>
-                                @endforeach
-                            </select>
+                            <label for="email" class="form-label">Date Start</label>
+                            <input type="date" class="form-control" id="date_start" name="date_start"
+                                placeholder="Date Start" required>
                         </div>
-
                         <div class="mb-3">
-                            <label for="category" class="form-label">Category</label>
-                            <select name="category" class="form-select" required>
-                                <option disabled>-- Choose Category --</option>
-                                @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" {{ $incident->category == $category->category
-                                    ? 'selected' : '' }}>
-                                    {{ $category->category }}
-                                </option>
-                                @endforeach
-                            </select>
+                            <label for="email" class="form-label">Date End</label>
+                            <input type="date" class="form-control" id="date_end" name="date_end" placeholder="Date End"
+                                required>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="date" class="form-label">Date</label>
-                            <input type="date" class="form-control" name="date" value="{{ $incident->date }}" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Description</label>
-                            <textarea class="form-control" name="description" id="description" cols="20"
-                                rows="2">{{ $incident->description }}</textarea>
-                        </div>
-
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
                                 Cancel
                             </button> <button type="submit" class="btn btn-warning">Save</button>
-                            <input type="hidden" name="id" value="{{ $incident->id }}">
+                            <input type="hidden" name="id" value="{{ $pica->id }}">
                         </div>
                     </form>
                 </div>
@@ -217,19 +178,19 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deleteAccidentModal{{ $incident->id }}" tabindex="-1"
-        aria-labelledby="deleteAccidentModalLabel{{ $incident->id }}" aria-hidden="true">
+    <div class="modal fade" id="deleteAccidentModal{{ $pica->id }}" tabindex="-1"
+        aria-labelledby="deleteAccidentModalLabel{{ $pica->id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content shadow-lg border-0 rounded-4">
                 <div class="modal-header bg-danger text-white rounded-top-4">
-                    <h5 class="modal-title text-white" id="deleteAccidentModalLabel{{ $incident->id }}">
+                    <h5 class="modal-title text-white" id="deleteAccidentModalLabel{{ $pica->id }}">
                         <i class="fa-solid fa-triangle-exclamation me-2"></i> Confirm Deletion
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('accident-delete') }}" method="POST">
+                <form action="{{ route('pica-delete') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $incident->id }}">
+                    <input type="hidden" name="id" value="{{ $pica->id }}">
                     <div class="modal-body py-4">
                         <div class="text-center">
                             <i class="fa-solid fa-circle-exclamation text-danger fs-1 mb-3"></i>
@@ -252,22 +213,22 @@
         </div>
     </div>
 
-    <div class="modal fade" id="picaModal{{ $incident->id }}" tabindex="-1"
-        aria-labelledby="picaModalLabel{{ $incident->id }}" aria-hidden="true">
+    <div class="modal fade" id="picaModal{{ $pica->id }}" tabindex="-1" aria-labelledby="picaModalLabel{{ $pica->id }}"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content shadow-sm border-0">
                 <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="picaModalLabel{{ $incident->id }}">
+                    <h5 class="modal-title" id="picaModalLabel{{ $pica->id }}">
                         PICA
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
 
-                <form action="{{ route('pica-post') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('pica-image-post') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
-                        <input type="hidden" name="incident_id" value="{{ $incident->id }}">
+                        <input type="hidden" name="pica_id" value="{{ $pica->id }}">
                         <div id="image-container">
                             <div class="mb-3 image-input">
                                 <label for="image" class="form-label">Image</label>
@@ -283,12 +244,62 @@
                         <button type="submit" class="btn btn-success">
                             Save
                         </button>
-                        <input type="hidden" name="incident_id" value="{{ $incident->id }}">
+                        <input type="hidden" name="pica_id" value="{{ $pica->id }}">
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="picaAccidentModal{{ $pica->id }}" tabindex="-1"
+        aria-labelledby="picaAccidentModalLabel{{ $pica->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg border-0 rounded-4">
+                <div class="modal-header bg-danger text-white rounded-top-4">
+                    <h5 class="modal-title text-white" id="picaAccidentModalLabel{{ $pica->id }}">
+                        PICA
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                @if ($pica && $pica->image->count() > 0)
+                <div class="p-3">
+                    <div id="carouselPica{{ $pica->id }}" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @foreach ($pica->image as $key => $img)
+                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                <img src="{{ asset('storage/' . $img->image) }}" class="d-block w-100 rounded"
+                                    style="max-height: 400px; object-fit: contain;" alt="Pica Image {{ $key + 1 }}">
+                            </div>
+                            @endforeach
+                        </div>
+
+                        @if ($pica->image->count() > 1)
+                        <button class="carousel-control-prev" type="button"
+                            data-bs-target="#carouselPica{{ $pica->id }}" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon bg-dark " aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button"
+                            data-bs-target="#carouselPica{{ $pica->id }}" data-bs-slide="next">
+                            <span class="carousel-control-next-icon bg-dark" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                        @endif
+                    </div>
+                </div>
+                @else
+                <div class="p-5">
+                    <div class="text-center text-muted fw-bold fs-5">
+                        Tidak ada gambar untuk ditampilkan.
+                    </div>
+                </div>
+                @endif
+
+
+            </div>
+        </div>
+    </div>
+
     @endforeach
 
     <x-script></x-script>

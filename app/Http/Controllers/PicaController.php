@@ -11,43 +11,61 @@ use Illuminate\Http\Request;
 class PicaController extends Controller
 {
 
-    public function pica($day)
+    public function pica($date)
     {
-        $incident = Incident::with(['pica', 'pica.image'])
-            ->where('date', $day)
-            ->firstOrFail();
-        $accidentDate = Carbon::parse($incident->date)->format('d F Y');
-        $images = $incident->pica->image ?? collect();
+        $date = Carbon::parse($date)->toDateString();
 
-        $data = [
-            'incident' => $incident,
-            'images' => $images,
-            'accidentDate' => $accidentDate,
-        ];
-        return view('pica', $data);
+        $pica = Pica::with('image')
+            ->whereDate('date_start', '<=', $date)
+            ->whereDate('date_end', '>=', $date)
+            ->first();
+
+        if (!$pica) {
+            return view('pica', [
+                'images' => collect(),
+                'picaDate' => Carbon::parse($date)->format('d F Y'),
+                'pica' => null,
+            ]);
+        }
+
+        return view('pica', [
+            'images' => $pica->image,
+            'picaDate' => Carbon::parse($date)->format('d F Y'),
+            'pica' => $pica,
+        ]);
     }
+
+
     public function picaPost(Request $request)
     {
         $service = new PicaService();
         $post = $service->post($request);
         return $post['success']
-            ? redirect()->route('accident')->with('success', $post['message'])
-            : redirect()->route('accident')->with('error', $post['message']);
+            ? redirect()->route('pica-admin')->with('success', $post['message'])
+            : redirect()->route('pica-admin')->with('error', $post['message']);
+    }
+    public function picaImagePost(Request $request)
+    {
+        $service = new PicaService();
+        $post = $service->postImage($request);
+        return $post['success']
+            ? redirect()->route('pica-admin')->with('success', $post['message'])
+            : redirect()->route('pica-admin')->with('error', $post['message']);
     }
     public function picaUpdate(Request $request)
     {
         $service = new PicaService();
         $update = $service->update($request);
         return $update['success']
-            ? redirect()->route('accident')->with('success', $update['message'])
-            : redirect()->route('accident')->with('error', $update['message']);
+            ? redirect()->route('pica-admin')->with('success', $update['message'])
+            : redirect()->route('pica-admin')->with('error', $update['message']);
     }
     public function picaDelete(Request $request)
     {
         $service = new PicaService();
         $delete = $service->delete($request);
         return $delete['success']
-            ? redirect()->route('accident')->with('success', $delete['message'])
-            : redirect()->route('accident')->with('error', $delete['message']);
+            ? redirect()->route('pica-admin')->with('success', $delete['message'])
+            : redirect()->route('pica-admin')->with('error', $delete['message']);
     }
 }

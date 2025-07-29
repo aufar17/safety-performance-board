@@ -73,16 +73,16 @@
 <body>
     <div class="row my-5">
         <div class="col-12">
-            <h2 class="text-center text-black">PICA {{ $accidentDate }}</h2>
+            <h2 class="text-center text-black">PICA {{ $picaDate }}</h2>
         </div>
     </div>
 
     <div class="carousel-wrapper">
-        @if ($images && count($images) > 0)
+        @if ($images->count() > 0)
         <div id="picaCarousel" class="carousel slide carousel-16by9" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="position-absolute top-0 start-0 m-3 info-box">
-                    <strong>Tanggal:</strong> {{ $accidentDate }}
+                    <strong>Tanggal:</strong> {{ $picaDate }}
                 </div>
 
                 @foreach ($images as $key => $img)
@@ -90,16 +90,18 @@
                     <img src="{{ asset('storage/' . $img->image) }}" alt="Slide {{ $key + 1 }}">
 
                     <div class="position-absolute bottom-0 start-0 m-3 info-box">
-                        <span class="fw-bolder">Description :</span> <br>
-                        {{$incident->description}}
+                        <span class="fw-bolder">Description:</span> <br>
+                        {{ $pica->description ?? '-' }}
                     </div>
+
                     <div class="position-absolute bottom-0 end-0 m-3 info-box">
-                        Slide {{ $key + 1 }} dari {{ count($images) }}
+                        Slide {{ $key + 1 }} dari {{ $images->count() }}
                     </div>
                 </div>
                 @endforeach
             </div>
-            @if (count($images) > 1)
+
+            @if ($images->count() > 1)
             <button class="carousel-control-prev" type="button" data-bs-target="#picaCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -116,6 +118,7 @@
         </div>
         @endif
     </div>
+
 
 
     <x-script />
