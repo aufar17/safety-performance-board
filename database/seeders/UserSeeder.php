@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\CTUser;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -15,19 +17,22 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'npk' => '121212',
-                'name' => 'Aufar Pakcoy',
+                'npk' => '10101',
+                'full_name' => 'Aufar',
+                'pwd' => Hash::make('admin'),
                 'dept' => 'EHS',
-                'sect' => 'Non BaaN',
+                'sect' => '11',
+                'subsect' => null,
                 'golongan' => '4',
-                'acting' => '4',
-                'password' => '123',
+                'acting' => '2',
+                'no_telp' => '085714505031',
+                'email' => 'aufar@gmail.com',
             ],
 
         ];
 
         foreach ($users as $user) {
-            User::create($user);
+            CTUser::create($user);
         }
     }
 }

@@ -13,7 +13,6 @@ class CheckSession
     {
         $routeName = $request->route()?->getName();
 
-        // Allow CAPTCHA route tanpa pengecekan
         if ($request->is('captcha')) {
             return $next($request);
         }
@@ -35,12 +34,9 @@ class CheckSession
         }
 
         $user = Auth::user();
-
-        // Jika OTP belum diverifikasi
         if (session('otp_verified') !== true) {
             $otp = $user->otp()->latest()->first();
 
-            // Kalau OTP expired dan bukan route resend, logout
             if (!in_array($routeName, ['resend-otp']) && $otp && $otp->expiry_date < now()) {
                 Auth::logout();
                 session()->flush();
@@ -50,7 +46,6 @@ class CheckSession
                 ]);
             }
 
-            // Jika akses route selain otp-verif atau proses otp, arahkan ke otp-verif
             if (!in_array($routeName, ['otp-verif', 'verify-otp', 'logout', 'resend-otp'])) {
                 return redirect()->route('otp-verif');
             }
@@ -58,6 +53,7 @@ class CheckSession
             return $this->setNoCacheHeaders($next($request));
         }
 
+        // Ini hanya dieksekusi jika sudah OTP verified
         if (in_array($routeName, ['login', 'login-post', 'otp-verif', 'verify-otp', 'resend-otp'])) {
             return redirect()->route('index');
         }

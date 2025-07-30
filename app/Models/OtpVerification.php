@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OtpVerification extends Model
 {
+    protected $connection = 'mysql';
     protected $table = 'otp_verifications';
     protected $fillable = [
-        'id_user',
+        'npk',
         'otp',
         'hp',
         'expiry_date',
@@ -22,5 +23,9 @@ class OtpVerification extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+    public function ctuser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'npk', 'npk');
     }
 }

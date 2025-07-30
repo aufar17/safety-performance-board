@@ -33,7 +33,7 @@ class OtpController extends Controller
             return redirect()->route('login')->withErrors(['error' => 'Session expired. Silakan login kembali.']);
         }
 
-        $otp = OtpVerification::where('id_user', $user->id)
+        $otp = OtpVerification::where('npk', $user->npk)
             ->where('expiry_date', '>=', now())
             ->latest('created_at')
             ->first();
@@ -58,7 +58,7 @@ class OtpController extends Controller
 
         $hp = Hp::where('npk', $user->npk)->first()->hp;
 
-        $expiredOtp = OtpVerification::where('id_user', $user->id)
+        $expiredOtp = OtpVerification::where('npk', $user->npk)
             ->where('expiry_date', '<', Carbon::now())
             ->orderBy('created_at', 'desc')
             ->first();
@@ -77,7 +77,7 @@ class OtpController extends Controller
             $otp = $expiredOtp;
         } else {
             $otp = OtpVerification::create([
-                'id_user'     => $user->id,
+                'npk'     => $user->npk,
                 'otp'         => rand(100000, 999999),
                 'hp'          => $hp,
                 'expiry_date' => Carbon::now()->addMinutes(5),

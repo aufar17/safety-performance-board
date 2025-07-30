@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\CTUser;
 use App\Models\Hp;
 use App\Models\OtpVerification;
 use App\Models\User;
@@ -20,9 +21,17 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $user = User::where('npk', $request->npk)->first();
+        $user = CTUser::where('npk', $request->npk)->first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
+        if (!$user) {
+            return back()->with('error', 'User tidak ditemukan.')->withInput($request->only('npk'));
+        }
+        if (!$user->dept == 'EHS') {
+            return back()->with('error', 'Maaf departemen anda bukan EHS.')->withInput($request->only('npk'));
+        }
+
+
+        if ($user && Hash::check($request->password, $user->pwd)) {
             Auth::login($user);
 
             $otp = rand(100000, 999999);
@@ -30,7 +39,7 @@ class AuthenticatedSessionController extends Controller
 
             $hp = Hp::where('npk', $user->npk)->first()->hp;
 
-            $existingOtp = OtpVerification::where('id_user', $user->id)
+            $existingOtp = OtpVerification::where('npk', $user->npk)
                 ->where('expiry_date', '<', now())
                 ->where('use', false)
                 ->latest()
@@ -48,7 +57,7 @@ class AuthenticatedSessionController extends Controller
                 ]);
             } else {
                 OtpVerification::create([
-                    'id_user'    => $user->id,
+                    'npk'    => $user->npk,
                     'otp'        => $otp,
                     'hp'         => $hp,
                     'expiry_date' => now()->addMinutes(5),

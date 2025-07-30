@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('otp_verifications', function (Blueprint $table) {
             $table->id()->primary();
-            $table->string('id_user');
+            $table->string('npk');
             $table->string('otp');
             $table->string('hp');
             $table->dateTime('expiry_date');

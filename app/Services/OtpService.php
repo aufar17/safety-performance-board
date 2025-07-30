@@ -16,7 +16,7 @@ class OtpService
     {
         $user = Auth::user();
 
-        $otp = OtpVerification::where('id_user', $user->id)
+        $otp = OtpVerification::where('npk', $user->npk)
             ->where('expiry_date', '>=', now())
             ->latest('created_at')
             ->first();
