@@ -26,15 +26,16 @@
             <h2 class="text-center text-uppercase mb-4" style="letter-spacing: 2px;">Safety Performance Board</h2>
 
             <div class="row align-items-start gy-2">
-                <div class="col-lg-8 col-md-12 px-4">
-                    <h4 class="text-uppercase fw-bolder mb-2" style="letter-spacing: 1px;">
-                        Update Tanggal
-                        <span class="badge bg-dark">{{ $now }}</span>
+                <div class="col-lg-4 col-md-12 px-4 text-center">
+                    <h4 class="bg-dark text-white text-uppercase fw-bolder mb-2 px-3 py-2 me-2"
+                        style="letter-spacing: 1px;">
+                        Update Tanggal :
+                        <span class="text-center">{{ $now }}</span>
                     </h4>
-                    <h5 class="text-uppercase fw-bolder mt-2" style="letter-spacing: 1px;">
+                    {{-- <h5 class="text-uppercase fw-bolder mt-2" style="letter-spacing: 1px;">
                         <span class="badge bg-warning text-dark">Periode Tahun :</span>
                         <span class="badge bg-dark">{{ $year }}</span>
-                    </h5>
+                    </h5> --}}
                 </div>
                 <div class="col-lg-4 col-md-12 text-center px-4">
 

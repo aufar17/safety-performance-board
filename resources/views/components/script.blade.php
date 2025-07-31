@@ -13,9 +13,9 @@
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
 </script>
-<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script async defer src="{{ asset('js/buttons.js') }}"></script>
 <script src="{{asset('js/soft-ui-dashboard.min.js?v=1.0.3') }}"></script>
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('js/jquery-3.7.0.js') }}"></script>
+<script src="{{ asset('js/jquery-datatable.min.js') }}"></script>
+<script src="{{ asset('js/datatablesmin.js') }}"></script>
+<script src="{{ asset('js/chart.js') }}"></script>

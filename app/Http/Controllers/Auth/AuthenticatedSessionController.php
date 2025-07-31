@@ -26,10 +26,9 @@ class AuthenticatedSessionController extends Controller
         if (!$user) {
             return back()->with('error', 'User tidak ditemukan.')->withInput($request->only('npk'));
         }
-        if (!$user->dept == 'EHS') {
+        if ($user->dept != "EHS") {
             return back()->with('error', 'Maaf departemen anda bukan EHS.')->withInput($request->only('npk'));
         }
-
 
         if ($user && Hash::check($request->password, $user->pwd)) {
             Auth::login($user);
