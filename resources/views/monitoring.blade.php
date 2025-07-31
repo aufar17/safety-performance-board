@@ -19,7 +19,10 @@
 <x-head></x-head>
 
 <body class="g-sidenav-show bg-gray-100 d-flex flex-column min-vh-100">
+
     <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg">
+
+
         <x-navbar-monitoring title="Dashboard" breadcumb="Dashboard" />
         <div class="container-fluid pb-2
         ">
@@ -85,10 +88,17 @@
         </div>
     </main>
 
+
     <x-footer></x-footer>
 
     <x-script />
     @stack('scripts')
+    <script>
+        setTimeout(() => {
+    location.reload();
+  }, 300000); 
+    </script>
+
 </body>
 
 </html>
