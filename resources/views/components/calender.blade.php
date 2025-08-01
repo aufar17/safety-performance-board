@@ -10,20 +10,36 @@
 <style>
     .calendar-grid {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 8px;
+        grid-template-columns: repeat(7, 4.0625rem);
+        grid-template-rows: repeat(7, 4.0625rem);
+        gap: 10px;
+
     }
 
-    .calendar-day {
-        height: 100px;
-        min-height: 100px;
-        max-height: 100px;
-        width: 100%;
+    .calendar-cell {
+        background: green;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        font-weight: bold;
+        border: 2px solid black;
     }
-
 
     .calendar-grid>div {
-        min-height: 80px;
+        height: 4.0625rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .highlight-col {
+        border-left: 3px solid #000;
+        border-right: 3px solid #000;
+    }
+
+    .highlight-row {
+        border-top: 3px solid #000;
+        border-bottom: 3px solid #000;
     }
 
     .transition-all {
@@ -43,61 +59,93 @@
     }
 </style>
 
-<div class="container py-4">
-    <div class="d-grid calendar-grid" style="grid-template-columns: repeat(7, 1fr);">
-        @foreach ($days as $hari)
-        <div class="text-center fw-bold text-uppercase small py-1">{{ $hari }}</div>
-        @endforeach
-
-        @for ($i = 1; $i < $offsetHariPertama; $i++) <div>
-    </div>
-    @endfor
-
-    @foreach ($tanggalList as $tanggal)
+<div class="container py-4 d-flex justify-content-center">
     @php
-    $baseClass = 'rounded text-center p-2 small transition-all fw-semibold d-flex flex-column justify-content-center
-    align-items-center';
+    use Carbon\Carbon;
 
-    $timeBgClass = match($tanggal['status']) {
-    'today' => 'bg-light border border-3 border-dark shadow position-relative text-dark',
-    'past' => 'bg-opacity-75 text-white',
-    'future' => 'bg-light text-muted border',
-    };
+    $tanggalByLabel = collect($tanggalList)->keyBy('label');
 
-    $incidentBgClass = $tanggal['bg'] ?? 'bg-light';
+    $jumlahHari = $tanggalList[count($tanggalList) - 1]['label'];
+    $offsetHariPertama = $offsetHariPertama ?? 0;
+    $totalGrid = ceil(($jumlahHari + $offsetHariPertama) / 7) * 7;
     @endphp
+    <div class="calendar-grid">
 
-    <div class="{{ $baseClass }} {{ $incidentBgClass }} {{ $timeBgClass }} position-relative {{ !empty($tanggal['categoryBadge']) ? 'clickable-day' : '' }}"
-        data-date="{{ $tanggal['tanggal'] }}">
-        @if (!empty($tanggal['pica']))
-        <a href="{{ route('pica', ['day' => $tanggal['tanggal']]) }}"
-            class="stretched-link text-decoration-none text-reset">
-        </a>
-        @endif
+        @php
+        $tanggalByLabel = collect($tanggalList)->keyBy('label');
+        $jumlahHari = count($tanggalList);
 
+        $gridOrder31 = [
+        null, null, 1, 2, 3, null, null,
+        null, null, 4, 5, 6, null, null,
+        7, 8, 9, 10, 11, 12, 13,
+        14, 15, 16, 17, 18, 19, 20,
+        21, 22, 23, 24, 25, 26, 27,
+        null, null, 28, 29, 30, null, null,
+        null, null, null, 31, null, null, null,
+        ];
 
-        @if (!empty($tanggal['categoryBadge']) && is_array($tanggal['categoryBadge']))
-        <div class="position-absolute top-0 start-0 d-flex flex-column align-items-start p-1 gap-1" style="z-index: 3;">
-            @foreach ($tanggal['categoryBadge'] as $badge)
-            <span class="badge bg-dark {{ $badge['color'] }}" style="font-size: 0.6rem;">
-                <i class="{{ $badge['icon'] }}"></i>
+        $gridOrder30 = $gridOrder31;
+        $gridOrder30[array_search(31, $gridOrder30)] = null;
+
+        $gridOrder28 = $gridOrder30;
+        $gridOrder28[array_search(30, $gridOrder28)] = null;
+        $gridOrder28[array_search(29, $gridOrder28)] = null;
+
+        $gridOrder = match($jumlahHari) {
+        28 => $gridOrder28,
+        30 => $gridOrder30,
+        default => $gridOrder31
+        };
+        @endphp
+
+        @foreach ($gridOrder as $label)
+        @if (is_null($label))
+        <div></div>
+        @else
+        @php
+        $tanggal = $tanggalByLabel[$label];
+        $baseClass = 'rounded text-center p-2 small transition-all fw-semibold d-flex flex-column justify-content-center
+        align-items-center';
+        $timeBgClass = match($tanggal['status']) {
+        'today' => 'bg-light border border-3 border-dark shadow position-relative text-dark',
+        'past' => 'bg-opacity-75 text-white',
+        'future' => 'bg-light text-muted border',
+        };
+        $incidentBgClass = $tanggal['bg'] ?? 'bg-light';
+        @endphp
+
+        <div class="{{ $baseClass }} {{ $incidentBgClass }} {{ $timeBgClass }} position-relative {{ !empty($tanggal['categoryBadge']) ? 'clickable-day' : '' }}"
+            data-date="{{ $tanggal['tanggal'] }}">
+            @if (!empty($tanggal['pica']))
+            <a href="{{ route('pica', ['day' => $tanggal['tanggal']]) }}"
+                class="stretched-link text-decoration-none text-reset"></a>
+            @endif
+
+            @if (!empty($tanggal['categoryBadge']) && is_array($tanggal['categoryBadge']))
+            <div class="position-absolute top-0 start-0 d-flex flex-column align-items-start p-1 gap-1"
+                style="z-index: 3;">
+                @foreach ($tanggal['categoryBadge'] as $badge)
+                <span class="badge bg-dark {{ $badge['color'] }}" style="font-size: 0.6rem;">
+                    <i class="{{ $badge['icon'] }}"></i>
+                </span>
+                @endforeach
+            </div>
+            @endif
+
+            <div class="fs-5">{{ $tanggal['label'] }}</div>
+
+            @if ($tanggal['status'] === 'today')
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"
+                style="font-size: 0.6rem; z-index: 10;">
+                Today
             </span>
-            @endforeach
+            @endif
         </div>
         @endif
+        @endforeach
 
-        <div class="fs-5">{{ $tanggal['label'] }}</div>
-
-        @if ($tanggal['status'] === 'today')
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"
-            style="font-size: 0.6rem; z-index: 10;">
-            Today
-        </span>
-        @endif
     </div>
-
-
-    @endforeach
 </div>
 
 @php

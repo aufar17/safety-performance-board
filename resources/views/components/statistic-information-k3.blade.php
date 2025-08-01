@@ -44,7 +44,7 @@
 </style>
 
 
-<div class="col-12">
+<div class="col-lg-12">
     <div class="card shadow-sm rounded">
         <div class="card-header py-3 bg-danger border-bottom">
             <div class="d-flex align-items-center">

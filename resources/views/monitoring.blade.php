@@ -35,10 +35,6 @@
                         Update Tanggal :
                         <span class="text-center">{{ $now }}</span>
                     </h4>
-                    {{-- <h5 class="text-uppercase fw-bolder mt-2" style="letter-spacing: 1px;">
-                        <span class="badge bg-warning text-dark">Periode Tahun :</span>
-                        <span class="badge bg-dark">{{ $year }}</span>
-                    </h5> --}}
                 </div>
                 <div class="col-lg-4 col-md-12 text-center px-4">
 
@@ -80,8 +76,7 @@
                     </div>
                     <div class="row g-4 align-items-stretch">
                         <x-calender title="Legend" icon="fa-solid fa-calendar" :bulan="$calender['bulan']"
-                            :tanggalList="$calender['tanggalList']" :days=" $calender['days']"
-                            :offsetHariPertama="$calender['offsetHariPertama']" />
+                            :tanggalList="$calender['tanggalList']" :days=" $calender['days']" />
                     </div>
                 </div>
             </div>
