@@ -221,6 +221,7 @@ class MonitoringService
             ->latest('id')
             ->first();
 
+
         $latestLwd = Incident::where('category_id', 3)
             ->latest('date')
             ->first();

@@ -53,7 +53,6 @@ class AgcLevelService
             ];
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
             return [
                 'success' => false,
                 'message' => 'Failed to save data accident.',

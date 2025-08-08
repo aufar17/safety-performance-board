@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
             $otp = rand(100000, 999999);
             session(['otp_code' => $otp, 'otp_verified' => false]);
 
-            $hp = Hp::where('npk', $user->npk)->first()->hp;
+            $hp = Hp::where('npk', $user->npk)->first()->no_hp;
 
             $existingOtp = OtpVerification::where('npk', $user->npk)
                 ->where('expiry_date', '<', now())

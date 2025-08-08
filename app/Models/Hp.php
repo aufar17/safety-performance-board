@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Hp extends Model
 {
     protected $connection = 'mysql3';
-    protected $table = 'hps';
+    protected $table = 'hp';
     protected $fillable =
     [
         'npk',
-        'hp',
+        'no_hp',
     ];
 
     public function user(): BelongsTo
