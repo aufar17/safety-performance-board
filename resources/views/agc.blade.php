@@ -29,7 +29,7 @@
 
     .dataTables_wrapper .dataTables_length select {
         border-radius: 0.5rem;
-        padding: 10px 30px;
+        padding: 10px 40px;
         font-size: 12px;
         margin-top: 15px;
 

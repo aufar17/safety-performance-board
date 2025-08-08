@@ -13,8 +13,8 @@
         grid-template-columns: repeat(7, 4.0625rem);
         grid-template-rows: repeat(7, 4.0625rem);
         gap: 10px;
-
     }
+
 
     .calendar-cell {
         background: green;
@@ -82,7 +82,7 @@
         14, 15, 16, 17, 18, 19, 20,
         21, 22, 23, 24, 25, 26, 27,
         null, null, 28, 29, 30, null, null,
-        null, null, null, 31, null, null, null,
+        null, null, ' ', 31, ' ', null, null,
         ];
 
         $gridOrder30 = $gridOrder31;
@@ -97,26 +97,31 @@
         30 => $gridOrder30,
         default => $gridOrder31
         };
+
+        $baseClass = 'rounded text-center p-2 small transition-all fw-semibold d-flex flex-column
+        justify-content-center
+        align-items-center';
         @endphp
 
         @foreach ($gridOrder as $label)
         @if (is_null($label))
+        {{-- Kotak kosong --}}
         <div></div>
-        @else
+
+        @elseif (is_numeric($label))
         @php
         $tanggal = $tanggalByLabel[$label];
-        $baseClass = 'rounded text-center p-2 small transition-all fw-semibold d-flex flex-column justify-content-center
-        align-items-center';
-        $timeBgClass = match($tanggal['status']) {
-        'today' => 'bg-light border border-3 border-dark shadow position-relative text-dark',
-        'past' => 'bg-opacity-75 text-white',
-        'future' => 'bg-light text-muted border',
-        };
-        $incidentBgClass = $tanggal['bg'] ?? 'bg-light';
+        $timeBgClass = $tanggal['status'] === 'today'
+        ? 'bg-light border border-3 border-dark shadow position-relative text-dark'
+        : ($tanggal['status'] === 'past'
+        ? 'bg-opacity-75 text-white'
+        : 'bg-secondary text-dark border');
+        $incidentBgClass = $tanggal['bg'] ?? '#727D73';
         @endphp
 
-        <div class="{{ $baseClass }} {{ $incidentBgClass }} {{ $timeBgClass }} position-relative {{ !empty($tanggal['categoryBadge']) ? 'clickable-day' : '' }}"
-            data-date="{{ $tanggal['tanggal'] }}">
+        <div class="{{ $baseClass }}  {{ $timeBgClass }} position-relative {{ !empty($tanggal['categoryBadge']) ? 'clickable-day' : '' }}"
+            data-date="{{ $tanggal['tanggal'] }}" style="background-color:{{ $incidentBgClass }} ">
+
             @if (!empty($tanggal['pica']))
             <a href="{{ route('pica', ['day' => $tanggal['tanggal']]) }}"
                 class="stretched-link text-decoration-none text-reset"></a>
@@ -126,7 +131,7 @@
             <div class="position-absolute top-0 start-0 d-flex flex-column align-items-start p-1 gap-1"
                 style="z-index: 3;">
                 @foreach ($tanggal['categoryBadge'] as $badge)
-                <span class="badge bg-dark {{ $badge['color'] }}" style="font-size: 0.6rem;">
+                <span class="badge   {{ $badge['color'] }}" style="font-size: 0.6rem;">
                     <i class="{{ $badge['icon'] }}"></i>
                 </span>
                 @endforeach
@@ -142,10 +147,17 @@
             </span>
             @endif
         </div>
+
+        @else
+        {{-- Karakter atau simbol lain --}}
+        <div class="{{ $baseClass }} bg-secondary text-dark border">
+            {{ $label }}
+        </div>
         @endif
         @endforeach
 
     </div>
+
 </div>
 
 @php

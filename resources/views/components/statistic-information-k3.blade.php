@@ -46,7 +46,7 @@
 
 <div class="col-lg-12">
     <div class="card shadow-sm rounded">
-        <div class="card-header py-3 bg-danger border-bottom">
+        <div class="card-header py-3 border-bottom" style="background-color: #FB4141;">
             <div class="d-flex align-items-center">
                 <i class="{{ $icon }} fs-4 me-3 text-white"></i>
                 <h5 class="mb-0 fw-bold text-white">{{ $title }}</h5>
@@ -56,25 +56,27 @@
             <div class="row g-3 ">
                 <div class="col-lg-7">
                     <span class="d-inline-block w-100 py-2 px-3 text-white text-center "
-                        style="background-color: #347433;">
+                        style="background-color: #06923E;">
                         Jumlah Hari Kecelakaan tanpa LTI (Hari)
                     </span>
                 </div>
                 <div class="col-lg-5">
                     <span class="d-inline-block w-100 py-2 px-3 text-white  text-center"
-                        style="background-color: #347433;">
+                        style="background-color: #06923E;">
                         FR (Frequency Rate)
                     </span>
                 </div>
             </div>
             <div class="row g-3 mb-1">
                 <div class="col-lg-7">
-                    <span class="text-center d-inline-block w-100 py-2 px-3 text-white  bg-dark">
+                    <span class="text-center d-inline-block w-100 py-2 px-3 text-white "
+                        style="background-color: #001BB7">
                         {{ $sinceLwd ?? 0}}
                     </span>
                 </div>
                 <div class="col-lg-5">
-                    <span class="text-center d-inline-block w-100 py-2 px-3 text-white  bg-dark">
+                    <span class="text-center d-inline-block w-100 py-2 px-3 text-white "
+                        style="background-color: #001BB7">
                         {{ $agc->fr ?? 0}}
                     </span>
                 </div>
@@ -83,25 +85,27 @@
             <div class="row g-3 ">
                 <div class="col-lg-7">
                     <span class="d-inline-block w-100 py-2 px-3 text-white text-center "
-                        style="background-color: #347433;">
+                        style="background-color: #06923E;">
                         Jumlah Jam Kecelakaan tanpa LTI (Hari)
                     </span>
                 </div>
                 <div class="col-lg-5">
                     <span class="d-inline-block w-100 py-2 px-3 text-white  text-center"
-                        style="background-color: #347433;">
+                        style="background-color: #06923E;">
                         SR (Severity Rate)
                     </span>
                 </div>
             </div>
             <div class="row g-3 mb-1">
                 <div class="col-lg-7">
-                    <span class="text-center d-inline-block w-100 py-2 px-3 text-white bg-dark">
+                    <span class="text-center d-inline-block w-100 py-2 px-3 text-white"
+                        style="background-color: #001BB7">
                         {{ $agc->accident_hours ?? 0 }}
                     </span>
                 </div>
                 <div class=" col-lg-5">
-                    <span class="text-center d-inline-block w-100 py-2 px-3 text-white bg-dark">
+                    <span class="text-center d-inline-block w-100 py-2 px-3 text-white"
+                        style="background-color: #001BB7">
                         {{ $agc->sr ?? 0 }}
                     </span>
                 </div>

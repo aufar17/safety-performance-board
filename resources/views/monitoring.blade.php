@@ -26,12 +26,13 @@
         <x-navbar-monitoring title="Dashboard" breadcumb="Dashboard" />
         <div class="container-fluid pb-2
         ">
-            <h2 class="text-center text-uppercase mb-4" style="letter-spacing: 2px;">Safety Performance Board</h2>
+            {{-- <h2 class="text-center text-uppercase mb-4" style="letter-spacing: 2px;">Safety Performance Board</h2>
+            --}}
 
             <div class="row align-items-start gy-2">
                 <div class="col-lg-4 col-md-12 px-4 text-center">
-                    <h4 class="bg-dark text-white text-uppercase fw-bolder mb-2 px-3 py-2 me-2"
-                        style="letter-spacing: 1px;">
+                    <h4 class="text-white text-uppercase fw-bolder mb-2 px-3 py-2 me-2"
+                        style="letter-spacing: 1px;background-color: #001BB7">
                         Update Tanggal :
                         <span class="text-center">{{ $now }}</span>
                     </h4>
@@ -43,8 +44,8 @@
 
             <div class="row mt-3">
                 <div class="col-lg-4 col-md-12 px-4">
-                    <h4 class="text-uppercase fw-bolder text-center bg-danger border-radius-sm py-2"
-                        style="letter-spacing: 1px;">
+                    <h4 class="text-uppercase fw-bolder text-center border-radius-sm py-2"
+                        style="letter-spacing: 1px; background-color: #FB4141;background-color: #FB4141;">
                         <span class="text-white">Informasi Kejadian</span>
                     </h4>
                     <div class="row g-4 align-items-stretch">
@@ -71,7 +72,7 @@
                         <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px; color:#347433;">Safety Calendar
                         </h4>
                         <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px;">
-                            Periode <span class="badge bg-dark">{{ $month }}</span>
+                            Periode <span class="badge" style=" background-color: #001BB7">{{ $month }}</span>
                         </h4>
                     </div>
                     <div class="row g-4 align-items-stretch">

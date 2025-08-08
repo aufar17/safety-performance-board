@@ -15,7 +15,7 @@
     }
 </style>
 
-<nav class="navbar navbar-main navbar-expand-lg px-0 py-0 mx-4 shadow-none border-radius-xl" id="navbarBlur">
+<nav class="navbar navbar-main navbar-expand-lg px-0 py-0 mx-4 shadow-none border-radius-xl mb-5" id="navbarBlur">
     <div class="container-fluid py-1 px-3 d-flex align-items-center justify-content-between flex-wrap">
 
         <div class="d-flex align-items-center">
@@ -25,8 +25,8 @@
             </a>
         </div>
 
-        <div class="flex-grow-1 mx-4 py-3 text-center d-none d-lg-block" style="background-color: #347433">
-            <h2 class="mb-0 fw-bold text-white" style="letter-spacing: 2px;">PT KAYABA INDONESIA</h2>
+        <div class="flex-grow-1 mx-4 py-3 text-center d-none d-lg-block" style="background-color: #06923E">
+            <h2 class="mb-0 fw-bold text-white" style="letter-spacing: 2px;">SAFETY INFORMATION BOARD</h2>
         </div>
 
         <div class="d-flex align-items-center">

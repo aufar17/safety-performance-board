@@ -154,11 +154,11 @@ class MonitoringService
 
             $bgClass = null;
             if ($incidentHariIni->contains(fn($incident) => $incident->category_id === 4)) {
-                $bgClass = 'bg-danger';
+                $bgClass = 'red';
             } elseif ($incidentHariIni->isNotEmpty()) {
-                $bgClass = 'bg-warning';
+                $bgClass = 'yellow';
             } else {
-                $bgClass = 'bg-success';
+                $bgClass = '#06923E';
             }
 
             $categoryBadge = [];
