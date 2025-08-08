@@ -7,7 +7,7 @@
 ])
 
 <div class="col-lg-12">
-    <div class="card shadow-sm rounded">
+    <div class="card shadow-sm" style="border: 1px solid #FB4141">
         <div class="card-header py-3 border-bottom" style="background-color: #FB4141;">
             <div class="d-flex flex-column align-items-start">
                 <div class="d-flex align-items-center">
@@ -17,16 +17,21 @@
             </div>
         </div>
         <div class="card-body p-4">
-            <div class="table-responsive mb-1">
+            <div class="table-responsive mb-1" id="table-responsive-{{ $chartId }}">
                 <table class="table table-sm table-bordered table-striped mb-4" style="font-size: 12px;">
+                    @php
+                    $months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Agt','Sep','Oct','Nov','Dec'];
+                    $bulanSekarang = strtolower(now()->locale('id')->translatedFormat('M'));
+                    @endphp
                     <thead class="table-danger">
                         <tr>
                             <th>Accident</th>
                             @foreach ($months as $month)
-                            <th class="text-center">{{ $month }}</th>
+                            <th @if(strtolower($month)===$bulanSekarang) data-bulan-ini="true" @endif>{{ $month }}</th>
                             @endforeach
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach ($accumulativeAccident as $accident => $info)
                         <tr>
@@ -87,5 +92,21 @@
             }
         });
     });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function () {
+        const container = document.getElementById("table-responsive-{{ $chartId }}");
+        const bulanIni = container.querySelector('thead th[data-bulan-ini="true"]');
+
+        if (container && bulanIni) {
+            const containerRect = container.getBoundingClientRect();
+            const bulanRect = bulanIni.getBoundingClientRect();
+            const jarakKeKiri = bulanRect.left - containerRect.left;
+
+            container.scrollLeft = jarakKeKiri - (container.clientWidth / 2) + (bulanIni.clientWidth / 2);
+        }
+    }, 300);
+});
 </script>
 @endpush

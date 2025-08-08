@@ -45,7 +45,7 @@
 
 
 <div class="col-lg-12">
-    <div class="card shadow-sm rounded">
+    <div class="card shadow-sm" style="border: 1px solid #FB4141">
         <div class="card-header py-3 border-bottom" style="background-color: #FB4141;">
             <div class="d-flex align-items-center">
                 <i class="{{ $icon }} fs-4 me-3 text-white"></i>
@@ -55,7 +55,7 @@
         <div class="card-body p-1">
             <div class="row g-3 ">
                 <div class="col-lg-7">
-                    <span class="d-inline-block w-100 py-2 px-3 text-white text-center "
+                    <span class="d-inline-block w-100 py-2 px-2 text-white text-center "
                         style="background-color: #06923E;">
                         Jumlah Hari Kecelakaan tanpa LTI (Hari)
                     </span>

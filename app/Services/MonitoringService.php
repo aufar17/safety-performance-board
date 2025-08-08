@@ -25,7 +25,6 @@ class MonitoringService
         $accumulativeAccident = $this->accumulativeAccident($year);
         $calender = $this->calendar();
         $agc = $this->agc();
-
         return compact(
             'user',
             'now',

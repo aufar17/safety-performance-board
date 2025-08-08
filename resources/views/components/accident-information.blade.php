@@ -16,7 +16,7 @@ $count = [
 @endphp
 
 <div class="col-lg-12 col-xl-12 col-md-12 h-100">
-    <div class="card shadow-sm rounded h-100 d-flex flex-column">
+    <div class="card shadow-sm h-100 d-flex flex-column" style="border: 1px solid #FB4141">
         <div class="card-header py-3 border-bottom" style="background-color: #FB4141;">
             <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
                 <i class="{{ $icon }} fs-4 me-2 text-white me-md-3"></i>
