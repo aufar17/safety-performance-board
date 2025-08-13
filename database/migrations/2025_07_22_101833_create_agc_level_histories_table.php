@@ -16,10 +16,12 @@ return new class extends Migration
             $table->integer('agc_level_id');
             $table->date('date');
             $table->integer('total_accident');
+            $table->unsignedBigInteger('work_hours');
             $table->integer('loss_day');
             $table->float('fr');
             $table->float('sr');
-            $table->float('accident_hours');
+            $table->double('accident_hours_non_lti');
+            $table->integer('total_hours');
             $table->timestamps();
         });
     }

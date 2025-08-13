@@ -6,6 +6,7 @@ use App\Models\Accident;
 use App\Models\AgcLevel;
 use App\Models\AgcLevelHistory;
 use App\Models\Incident;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,10 +21,21 @@ class AgcLevelService
         try {
             $lossday = $request->loss_day;
             $total_accident = $request->total_accident;
-            $accident_hours = $request->accident_hours;
+            $total_hours = $request->total_hours;
+            $work_hours = $request->work_hours;
 
-            $fr = ($total_accident / $accident_hours) * 1000000;
-            $sr = ($lossday / $accident_hours) * 1000000;
+            $latestLwd = Incident::where('category_id', 3)
+                ->latest('date')
+                ->first();
+
+            $sinceLwd = $latestLwd
+                ? floor(Carbon::parse($latestLwd->date)->floatDiffInDays(Carbon::now()))
+                : 0;
+
+            $accident_hours_non_lti = $total_hours * $sinceLwd;
+
+            $fr = round(($total_accident / $work_hours) * 1000000, 2);
+            $sr = round(($lossday / $work_hours) * 1000000, 2);
 
             $frLevel = AgcLevel::matchFr($fr)->first();
             $srLevel = AgcLevel::matchSr($sr)->first();
@@ -41,7 +53,9 @@ class AgcLevelService
                 'loss_day'           => $request->loss_day,
                 'fr'           => $fr,
                 'sr'           => $sr,
-                'accident_hours'           => $accident_hours,
+                'total_hours'           => $total_hours,
+                'accident_hours_non_lti'           => $accident_hours_non_lti,
+                'work_hours'           => $work_hours,
             ]);
 
             DB::commit();
@@ -68,9 +82,21 @@ class AgcLevelService
         try {
             $lossday = $request->loss_day;
             $total_accident = $request->total_accident;
+            $total_hours = $request->total_hours;
+            $work_hours = $request->work_hours;
 
-            $fr = ($total_accident / $total_accident) * 1000000;
-            $sr = ($lossday / $total_accident) * 1000000;
+            $latestLwd = Incident::where('category_id', 3)
+                ->latest('date')
+                ->first();
+
+            $sinceLwd = $latestLwd
+                ? floor(Carbon::parse($latestLwd->date)->floatDiffInDays(Carbon::now()))
+                : 0;
+
+            $accident_hours_non_lti = $total_hours * $sinceLwd;
+
+            $fr = round(($total_accident / $work_hours) * 1000000, 2);
+            $sr = round(($lossday / $work_hours) * 1000000, 2);
 
             $frLevel = AgcLevel::matchFr($fr)->first();
             $srLevel = AgcLevel::matchSr($sr)->first();
@@ -88,7 +114,9 @@ class AgcLevelService
                 'loss_day'           => $request->loss_day,
                 'fr'           => $fr,
                 'sr'           => $sr,
-                'accident_hours'  => $request->accident_hours,
+                'total_hours'           => $total_hours,
+                'accident_hours_non_lti'           => $accident_hours_non_lti,
+                'work_hours'           => $work_hours,
 
             ]);
 

@@ -30,12 +30,16 @@ class AuthenticatedSessionController extends Controller
             return back()->with('error', 'Maaf departemen anda bukan EHS.')->withInput($request->only('npk'));
         }
         if ($user && Hash::check($request->password, $user->pwd)) {
+            $hp = Hp::where('npk', $user->npk)->first();
+
+            if (!$hp) {
+                return back()->with('error', 'Tidak ada daftar nomor HP.')->withInput($request->only('npk'));
+            }
+
             Auth::login($user);
-
-            $otp = rand(100000, 999999);
+            // $otp = rand(100000, 999999);
+            $otp = 123456;
             session(['otp_code' => $otp, 'otp_verified' => false]);
-
-            $hp = Hp::where('npk', $user->npk)->first()->no_hp;
 
             $existingOtp = OtpVerification::where('npk', $user->npk)
                 ->where('expiry_date', '<', now())

@@ -100,7 +100,7 @@
                 <div class="col-lg-7">
                     <span class="text-center d-inline-block w-100 py-2 px-3 text-white"
                         style="background-color: #001BB7">
-                        {{ $agc->accident_hours ?? 0 }}
+                        {{ $agc->accident_hours_non_lti ?? 0 }}
                     </span>
                 </div>
                 <div class=" col-lg-5">

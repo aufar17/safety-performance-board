@@ -14,10 +14,12 @@ class AgcLevelHistory extends Model
         'agc_level_id',
         'date',
         'total_accident',
+        'work_hours',
         'loss_day',
         'fr',
         'sr',
-        'accident_hours',
+        'accident_hours_non_lti',
+        'total_hours',
     ];
 
     public function agc(): BelongsTo

@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\Models\Accident;
+use App\Models\AgcLevel;
+use App\Models\AgcLevelHistory;
 use App\Models\Incident;
 use App\Models\Pica;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,22 +23,32 @@ class AccidentService
             $incident = Incident::create([
                 'accident_id' => $request->accident,
                 'category_id' => $request->category,
-                'date'     => $request->date,
-                'description'     => $request->description,
+                'date'        => $request->date,
+                'description' => $request->description,
             ]);
-            // dd($incident);
+
+            if ($incident->category_id == 3) { // LWD
+                $agc = AgcLevelHistory::whereYear('date', now()->year)->first(); // ambil satu record
+
+                if ($agc) {
+                    $sinceLwd = floor(Carbon::parse($incident->date)->floatDiffInDays(Carbon::now()));
+                    $accident_hours_non_lti = $agc->total_hours * $sinceLwd;
+
+                    $agc->update([
+                        'accident_hours_non_lti' => $accident_hours_non_lti
+                    ]);
+                }
+            }
 
             DB::commit();
 
             return [
                 'success' => true,
                 'message' => 'Data accident saved successfully.',
-                'data'    => [$incident],
+                'data'    => $incident,
             ];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
-
             return [
                 'success' => false,
                 'message' => 'Failed to save data accident.',
@@ -43,17 +56,38 @@ class AccidentService
             ];
         }
     }
+
     public function update(Request $request): array
     {
-        $incident = Incident::where('id', $request->id)->first();
+        $incident = Incident::find($request->id);
+        if (!$incident) {
+            return [
+                'success' => false,
+                'message' => 'Incident not found.',
+            ];
+        }
+
         DB::beginTransaction();
         try {
             $incident->update([
                 'accident_id' => $request->accident,
                 'category_id' => $request->category,
-                'date' => $request->date,
-                'description'     => $request->description,
+                'date'        => $request->date,
+                'description' => $request->description,
             ]);
+
+            if ($incident->category_id == 3) { // LWD
+                $agc = AgcLevelHistory::whereYear('date', now()->year)->first(); // ambil satu record
+
+                if ($agc) {
+                    $sinceLwd = floor(Carbon::parse($incident->date)->floatDiffInDays(Carbon::now()));
+                    $accident_hours_non_lti = $agc->total_hours * $sinceLwd;
+
+                    $agc->update([
+                        'accident_hours_non_lti' => $accident_hours_non_lti
+                    ]);
+                }
+            }
 
             DB::commit();
 
@@ -62,8 +96,9 @@ class AccidentService
                 'message' => 'Data accident updated successfully.',
                 'data'    => $incident,
             ];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
+            dd($e);
 
             return [
                 'success' => false,
@@ -72,6 +107,7 @@ class AccidentService
             ];
         }
     }
+
     public function delete(Request $request): array
     {
         $incident = Incident::where('id', $request->id)->first();
