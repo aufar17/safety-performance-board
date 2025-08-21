@@ -75,12 +75,11 @@
             <a class="navbar-brand d-flex align-items-center fw-bold text-danger fs-5 me-3"
                 href="{{ route('monitoring') }}">
                 <img src="{{ asset('img/logo.png') }}" alt="KYB" height="32" class="me-2" />
-                <span class="d-lg-none">Checksheet Portal</span>
             </a>
 
             <div class="d-none d-lg-block position-absolute top-50 start-50 translate-middle">
                 <a class="navbar-brand fw-bold text-danger fs-5" href="{{ route('issue') }}">
-                    <i class="fas fa-check-circle me-2"></i> Issue
+                    <i class="fas fa-check-circle me-2"></i> PICA
                 </a>
             </div>
             <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"

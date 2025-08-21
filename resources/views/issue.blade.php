@@ -8,7 +8,6 @@
             <a class="navbar-brand d-flex align-items-center fw-bold text-danger fs-5 me-3"
                 href="{{ route('monitoring') }}">
                 <img src="{{ asset('img/logo.png') }}" alt="KYB" height="32" class="me-2" />
-                <span class="d-lg-none">Checksheet Portal</span>
             </a>
 
             <div class="d-none d-lg-block position-absolute top-50 start-50 translate-middle">
