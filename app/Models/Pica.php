@@ -11,6 +11,8 @@ class Pica extends Model
     protected $connection = 'mysql';
     protected $table = 'picas';
     protected $fillable = [
+        'type',
+        'title',
         'date_start',
         'date_end',
     ];

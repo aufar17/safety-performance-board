@@ -29,7 +29,7 @@
             {{-- <h2 class="text-center text-uppercase mb-4" style="letter-spacing: 2px;">Safety Performance Board</h2>
             --}}
 
-            <div class="row align-items-start gy-2">
+            <div class="row justify-content-between gy-2">
                 <div class="col-lg-4 col-md-12 px-4 text-center">
                     <h4 class="text-white text-uppercase fw-bolder mb-2 px-3 py-2 me-2"
                         style="letter-spacing: 1px;background-color: #001BB7">
@@ -37,8 +37,9 @@
                         <span class="text-center">{{ $now }}</span>
                     </h4>
                 </div>
-                <div class="col-lg-4 col-md-12 text-center px-4">
-
+                <div class="col-lg-4 col-md-12 text-center d-flex justify-content-center px-4">
+                    <a href="{{ route('issue') }}"
+                        class="btn bg-gradient-warning text-white text-uppercase fw-bolder mb-2 px-3 py-2 me-2 w-25 fs-5 d-flex align-items-center justify-content-center">Issue</a>
                 </div>
             </div>
 

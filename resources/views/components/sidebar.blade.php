@@ -21,6 +21,9 @@
             <x-navlink href="{{ route('pica-admin') }}" :active="request()->is('pica-admin')" icon="fa-file-contract">
                 PICA
             </x-navlink>
+            <x-navlink href="{{ route('issue-admin') }}" :active="request()->is('issue-admin')" icon="fa-file">
+                Issue
+            </x-navlink>
 
             <li class="
             nav-item mt-3">

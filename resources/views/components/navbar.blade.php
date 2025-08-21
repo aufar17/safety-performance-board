@@ -59,7 +59,7 @@
                     <a href="javascript:;" class="nav-link text-body font-weight-bold px-0" id="dropdownMenuButton"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-user text-lg me-sm-1"></i>
-                        <span class="d-sm-inline d-none">{{ $user->name }}</span>
+                        <span class="d-sm-inline d-none">{{ $user->full_name }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-3"
                         aria-labelledby="dropdownMenuButton" style="min-width: 200px;">
@@ -68,7 +68,7 @@
                                 style="width: 40px; height: 40px; font-size: 28px;">
                                 <i class="fa fa-user"></i>
                             </div>
-                            <h6 class="fw-bold mt-2 mb-0">{{ $user->name }}</h6>
+                            <h6 class="fw-bold mt-2 mb-0">{{ $user->full_name }}</h6>
                             <small class="text-muted">{{ $user->dept }}</small>
                         </li>
                         <li>

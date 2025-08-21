@@ -93,6 +93,7 @@ class MainController extends Controller
         [$year, $month] = explode('-', $filterMonthYear);
         $carbonMonth = Carbon::createFromDate($year, $month, 1);
         $picas = Pica::with('image')
+            ->where('type', 1)
             ->whereYear('date_start', $year)
             ->whereMonth('date_start', $month)
             ->paginate(10);
@@ -107,5 +108,28 @@ class MainController extends Controller
         ];
 
         return view('pica-admin', $data);
+    }
+    public function issueAdmin(Request $request)
+    {
+        $user = Auth::user();
+        $now = Carbon::now();
+
+        $filterMonthYear = $request->input('filterMonthYear', $now->format('Y-m'));
+        [$year, $month] = explode('-', $filterMonthYear);
+        $carbonMonth = Carbon::createFromDate($year, $month, 1);
+        $issues = Pica::with('image')
+            ->where('type', 2)
+            ->paginate(10);
+
+
+        $data = [
+            'issues' => $issues,
+            'month' => $carbonMonth->format('F'),
+            'year' => $year,
+            'now' => Carbon::createFromDate($year, $month)->format('F Y'),
+            'user' => $user
+        ];
+
+        return view('issue-admin', $data);
     }
 }

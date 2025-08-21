@@ -5,7 +5,6 @@
 <style>
     html,
     body {
-        background-color: #FFEDFA;
         padding: 0;
         margin: 0;
     }
@@ -70,7 +69,37 @@
     }
 </style>
 
-<body>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-2 sticky-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center fw-bold text-danger fs-5 me-3"
+                href="{{ route('monitoring') }}">
+                <img src="{{ asset('img/logo.png') }}" alt="KYB" height="32" class="me-2" />
+                <span class="d-lg-none">Checksheet Portal</span>
+            </a>
+
+            <div class="d-none d-lg-block position-absolute top-50 start-50 translate-middle">
+                <a class="navbar-brand fw-bold text-danger fs-5" href="{{ route('issue') }}">
+                    <i class="fas fa-check-circle me-2"></i> Issue
+                </a>
+            </div>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold {{ request()->routeIs('monitoring') ? 'text-danger' : '' }}"
+                            href="{{ route('monitoring') }}">
+                            <i class="fas fa-tv me-1"></i> Monitoring
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="row my-5">
         <div class="col-12">
             <h2 class="text-center text-black">PICA {{ $picaDate }}</h2>

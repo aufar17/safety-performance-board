@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class PicaService
+class IssueService
 {
     /**
      * Handle OTP verification.
@@ -25,23 +25,24 @@ class PicaService
         try {
 
             $createPica = Pica::create([
-                'type' => 1,
+                'type' => 2,
+                'title' => $request->title,
                 'date_start' => $request->date_start,
-                'date_end' => $request->date_end,
             ]);
 
             DB::commit();
 
             return [
                 'success' => true,
-                'message' => 'Data pica saved successfully.',
+                'message' => 'Data issue saved successfully.',
                 'data'    => $createPica,
             ];
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
             return [
                 'success' => false,
-                'message' => 'Failed to save data pica.',
+                'message' => 'Failed to save data issue.',
                 'error'   => $e->getMessage(),
             ];
         }
@@ -56,7 +57,7 @@ class PicaService
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
-                    $path = $image->storeAs('pica', $filename);
+                    $path = $image->storeAs('issue', $filename);
 
                     $image =  PicaImage::create([
                         'pica_id' => $pica->id,
@@ -90,14 +91,14 @@ class PicaService
         DB::beginTransaction();
         try {
             $update = $pica->update([
+                'title' => $request->title,
                 'date_start' => $request->date_start,
-                'date_end' => $request->date_end,
             ]);
             DB::commit();
 
             return [
                 'success' => true,
-                'message' => 'Data accident updated successfully.',
+                'message' => 'Data issue updated successfully.',
                 'data'    => $update,
             ];
         } catch (Exception $e) {
@@ -105,55 +106,55 @@ class PicaService
 
             return [
                 'success' => false,
-                'message' => 'Failed to update data accident.',
+                'message' => 'Failed to update data issue.',
                 'error'   => $e->getMessage(),
             ];
         }
     }
     public function delete(Request $request): array
     {
-        $pica = Pica::where('id', $request->id)->first();
+        $issue = Pica::where('id', $request->id)->first();
         DB::beginTransaction();
         try {
-            $pica->delete();
+            $issue->delete();
 
             DB::commit();
 
             return [
                 'success' => true,
-                'message' => 'Data pica deleted successfully.',
-                'data'    => $pica,
+                'message' => 'Data issue deleted successfully.',
+                'data'    => $issue,
             ];
         } catch (Exception $e) {
             DB::rollBack();
 
             return [
                 'success' => false,
-                'message' => 'Failed to delete data pica.',
+                'message' => 'Failed to delete data issue.',
                 'error'   => $e->getMessage(),
             ];
         }
     }
     public function deleteImages(Request $request): array
     {
-        $pica = PicaImage::where('id', $request->id)->first();
+        $issue = PicaImage::where('id', $request->id)->first();
         DB::beginTransaction();
         try {
-            $pica->delete();
+            $issue->delete();
 
             DB::commit();
 
             return [
                 'success' => true,
-                'message' => 'Pica image deleted successfully.',
-                'data'    => $pica,
+                'message' => 'Issue image deleted successfully.',
+                'data'    => $issue,
             ];
         } catch (Exception $e) {
             DB::rollBack();
 
             return [
                 'success' => false,
-                'message' => 'Failed to delete Pica image.',
+                'message' => 'Failed to delete Issue image.',
                 'error'   => $e->getMessage(),
             ];
         }
