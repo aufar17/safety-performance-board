@@ -3,12 +3,6 @@
 <x-head />
 
 <style>
-    html,
-    body {
-        padding: 0;
-        margin: 0;
-    }
-
     .carousel-wrapper {
         width: 95%;
         max-width: 1300px;

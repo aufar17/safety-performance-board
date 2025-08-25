@@ -36,7 +36,6 @@ class IssueController extends Controller
             'availableDates' => $availableDates,
             'selectedDate'   => $request->date_start
         ];
-
         return view('issue', $data);
     }
 

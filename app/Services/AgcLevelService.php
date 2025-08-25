@@ -35,6 +35,7 @@ class AgcLevelService
             $accident_hours_non_lti = $total_hours * $sinceLwd;
 
             $fr = round(($total_accident / $work_hours) * 1000000, 2);
+            dd($fr);
             $sr = round(($lossday / $work_hours) * 1000000, 2);
 
             $frLevel = AgcLevel::matchFr($fr)->first();
@@ -57,6 +58,7 @@ class AgcLevelService
                 'accident_hours_non_lti'           => $accident_hours_non_lti,
                 'work_hours'           => $work_hours,
             ]);
+            dd($agcHistory);
 
             DB::commit();
 
@@ -119,6 +121,8 @@ class AgcLevelService
                 'work_hours'           => $work_hours,
 
             ]);
+            dd($accident_hours_non_lti);
+
 
             DB::commit();
 

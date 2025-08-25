@@ -17,7 +17,7 @@ class CheckSession
             return $next($request);
         }
 
-        if (in_array($routeName, ['captcha', 'monitoring', 'pica'])) {
+        if (in_array($routeName, ['captcha', 'monitoring', 'pica', 'issue'])) {
             return $next($request);
         }
 

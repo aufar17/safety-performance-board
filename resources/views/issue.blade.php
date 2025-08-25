@@ -5,8 +5,7 @@
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-2 sticky-top">
         <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex align-items-center fw-bold text-danger fs-5 me-3"
-                href="{{ route('monitoring') }}">
+            <a class="navbar-brand d-flex align-items-center fw-bold text-danger fs-5 me-3" href="{{ route('index') }}">
                 <img src="{{ asset('img/logo.png') }}" alt="KYB" height="32" class="me-2" />
             </a>
 
@@ -18,7 +17,7 @@
             <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
                 aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>   
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
