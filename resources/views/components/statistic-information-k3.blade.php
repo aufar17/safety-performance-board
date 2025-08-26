@@ -86,7 +86,7 @@
                 <div class="col-lg-7">
                     <span class="d-inline-block w-100 py-2 px-3 text-white text-center "
                         style="background-color: #06923E;">
-                        Jumlah Jam Kecelakaan tanpa LTI (Hari)
+                        Jumlah Jam Kecelakaan tanpa LTI (Jam)
                     </span>
                 </div>
                 <div class="col-lg-5">

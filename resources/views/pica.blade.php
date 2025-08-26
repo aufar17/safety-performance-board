@@ -63,7 +63,7 @@
     }
 </style>
 
-<body class="bg-light">
+<body class="bg-light overflow-x-hidden">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-2 sticky-top">
         <div class="container-fluid px-4">
             <a class="navbar-brand d-flex align-items-center fw-bold text-danger fs-5 me-3"

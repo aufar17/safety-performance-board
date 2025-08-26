@@ -39,9 +39,9 @@
 <body class="g-sidenav-show  bg-gray-100">
     <x-sidebar></x-sidebar>
     <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
-        <x-navbar title="Accident" breadcumb="Accident" :user="$user" />
+        <x-navbar title="Issues" breadcumb="Issues" :user="$user" />
         <div class="container-fluid p-5">
-            <x-card title="{{ $month }} {{ $year }} Accident" icon="fa-solid fa-person-falling">
+            <x-card title="{{ $year }} Issues" icon="fa-solid fa-person-falling">
                 @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
@@ -54,24 +54,13 @@
                     New Data
                 </button>
 
-                <div class="row mb-3 align-items-end">
-                    <div class="col-sm-2">
-                        <label for="filterMonthYear" class="form-label">PERIODE</label>
-                        <form action="{{ route('accident') }}" method="GET">
-                            <input type="month" name="filterMonthYear"
-                                value="{{ request('filterMonthYear',  now()->format('Y-m')), }}"
-                                class="form-control form-control-sm" onchange="this.form.submit()">
-                        </form>
-                    </div>
-                </div>
-
                 <div class="table-responsive">
                     <table id="accident" class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
                                 <th class="text-center">Title</th>
-                                <th class="text-center">Datet</th>
+                                <th class="text-center">Date</th>
                                 <th class="text-center">PICA</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -114,7 +103,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-success">
-                    <h5 class="modal-title" id="newAccidentModalLabel">New Data Accident</h5>
+                    <h5 class="modal-title" id="newAccidentModalLabel">New Data Issues</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -146,8 +135,8 @@
         aria-labelledby="editAccidentModalLabel{{ $issue->id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-warning">
-                    <h5 class="modal-title" id="editAccidentModalLabel">Edit Data Accident</h5>
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title" id="editAccidentModalLabel">Edit Data Issues</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -167,7 +156,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
                                 Cancel
-                            </button> <button type="submit" class="btn btn-warning">Save</button>
+                            </button> <button type="submit" class="btn btn-success">Save</button>
                             <input type="hidden" name="id" value="{{ $issue->id }}">
                         </div>
                     </form>

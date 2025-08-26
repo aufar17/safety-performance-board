@@ -14,14 +14,13 @@ return new class extends Migration
         Schema::create('agc_level_histories', function (Blueprint $table) {
             $table->id();
             $table->integer('agc_level_id');
-            $table->date('date');
             $table->integer('total_accident');
             $table->unsignedBigInteger('work_hours');
             $table->integer('loss_day');
             $table->float('fr');
             $table->float('sr');
             $table->double('accident_hours_non_lti');
-            $table->integer('total_hours');
+            $table->integer('man_power');
             $table->timestamps();
         });
     }

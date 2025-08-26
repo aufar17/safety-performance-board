@@ -12,14 +12,13 @@ class AgcLevelHistory extends Model
     protected $table = 'agc_level_histories';
     protected $fillable = [
         'agc_level_id',
-        'date',
         'total_accident',
         'work_hours',
         'loss_day',
         'fr',
         'sr',
         'accident_hours_non_lti',
-        'total_hours',
+        'man_power',
     ];
 
     public function agc(): BelongsTo

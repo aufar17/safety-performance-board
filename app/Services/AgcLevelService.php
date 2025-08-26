@@ -21,22 +21,15 @@ class AgcLevelService
         try {
             $lossday = $request->loss_day;
             $total_accident = $request->total_accident;
-            $total_hours = $request->total_hours;
-            $work_hours = $request->work_hours;
+            $man_power = $request->man_power;
+            $sinceLwd = $request->accident_days;
+            $work_hours_fr = $request->work_hours_fr;
+            $work_hours_sr = $request->work_hours_sr;
 
-            $latestLwd = Incident::where('category_id', 3)
-                ->latest('date')
-                ->first();
+            $accident_hours_non_lti = $man_power * 8 * $sinceLwd;
 
-            $sinceLwd = $latestLwd
-                ? floor(Carbon::parse($latestLwd->date)->floatDiffInDays(Carbon::now()))
-                : 0;
-
-            $accident_hours_non_lti = $total_hours * $sinceLwd;
-
-            $fr = round(($total_accident / $work_hours) * 1000000, 2);
-            dd($fr);
-            $sr = round(($lossday / $work_hours) * 1000000, 2);
+            $fr = round(($total_accident / $work_hours_fr) * 1000000, 2);
+            $sr = round(($lossday / $work_hours_sr) * 1000000, 2);
 
             $frLevel = AgcLevel::matchFr($fr)->first();
             $srLevel = AgcLevel::matchSr($sr)->first();
@@ -49,17 +42,14 @@ class AgcLevelService
 
             $agcHistory = AgcLevelHistory::create([
                 'agc_level_id' => $matchedLevel?->id,
-                'date'         => $request->date,
                 'total_accident'           => $total_accident,
                 'loss_day'           => $request->loss_day,
                 'fr'           => $fr,
                 'sr'           => $sr,
-                'total_hours'           => $total_hours,
+                'man_power'           => $man_power,
                 'accident_hours_non_lti'           => $accident_hours_non_lti,
-                'work_hours'           => $work_hours,
+                'work_hours'           => $work_hours_fr,
             ]);
-            dd($agcHistory);
-
             DB::commit();
 
             return [
@@ -84,21 +74,15 @@ class AgcLevelService
         try {
             $lossday = $request->loss_day;
             $total_accident = $request->total_accident;
-            $total_hours = $request->total_hours;
-            $work_hours = $request->work_hours;
+            $man_power = $request->man_power;
+            $sinceLwd = $request->accident_days;
+            $work_hours_fr = $request->work_hours_fr;
+            $work_hours_sr = $request->work_hours_sr;
 
-            $latestLwd = Incident::where('category_id', 3)
-                ->latest('date')
-                ->first();
+            $accident_hours_non_lti = $man_power * 8 * $sinceLwd;
 
-            $sinceLwd = $latestLwd
-                ? floor(Carbon::parse($latestLwd->date)->floatDiffInDays(Carbon::now()))
-                : 0;
-
-            $accident_hours_non_lti = $total_hours * $sinceLwd;
-
-            $fr = round(($total_accident / $work_hours) * 1000000, 2);
-            $sr = round(($lossday / $work_hours) * 1000000, 2);
+            $fr = round(($total_accident / $work_hours_fr) * 1000000, 2);
+            $sr = round(($lossday / $work_hours_sr) * 1000000, 2);
 
             $frLevel = AgcLevel::matchFr($fr)->first();
             $srLevel = AgcLevel::matchSr($sr)->first();
@@ -111,18 +95,15 @@ class AgcLevelService
 
             $updateAgc =  $agc->update([
                 'agc_level_id' => $matchedLevel?->id,
-                'date'         => $request->date,
                 'total_accident'           => $total_accident,
                 'loss_day'           => $request->loss_day,
                 'fr'           => $fr,
                 'sr'           => $sr,
-                'total_hours'           => $total_hours,
+                'man_power'           => $man_power,
                 'accident_hours_non_lti'           => $accident_hours_non_lti,
-                'work_hours'           => $work_hours,
+                'work_hours'           => $work_hours_fr,
 
             ]);
-            dd($accident_hours_non_lti);
-
 
             DB::commit();
 
@@ -133,6 +114,7 @@ class AgcLevelService
             ];
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
 
             return [
                 'success' => false,

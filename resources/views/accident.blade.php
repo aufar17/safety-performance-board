@@ -85,7 +85,7 @@
                                 aria-labelledby="editAccidentModalLabel{{ $incident->id }}" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
-                                        <div class="modal-header bg-warning">
+                                        <div class="modal-header bg-success">
                                             <h5 class="modal-title" id="editAccidentModalLabel">Edit Data Accident</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
@@ -136,7 +136,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-outline-secondary"
                                                         data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-warning">Save</button>
+                                                    <button type="submit" class="btn btn-success">Save</button>
                                                 </div>
                                             </form>
                                         </div>

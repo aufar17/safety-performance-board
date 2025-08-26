@@ -27,8 +27,8 @@ class AccidentService
                 'description' => $request->description,
             ]);
 
-            if ($incident->category_id == 3) { // LWD
-                $agc = AgcLevelHistory::whereYear('date', now()->year)->first(); // ambil satu record
+            if ($incident->category_id == 3) {
+                $agc = AgcLevelHistory::whereYear('created_at', now()->year)->first();
 
                 if ($agc) {
                     $sinceLwd = floor(Carbon::parse($incident->date)->floatDiffInDays(Carbon::now()));
@@ -76,8 +76,8 @@ class AccidentService
                 'description' => $request->description,
             ]);
 
-            if ($incident->category_id == 3) { // LWD
-                $agc = AgcLevelHistory::whereYear('date', now()->year)->first(); // ambil satu record
+            if ($incident->category_id == 3) {
+                $agc = AgcLevelHistory::whereYear('created_at', now()->year)->first();
 
                 if ($agc) {
                     $sinceLwd = floor(Carbon::parse($incident->date)->floatDiffInDays(Carbon::now()));

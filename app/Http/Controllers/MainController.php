@@ -68,9 +68,17 @@ class MainController extends Controller
         [$year, $month] = explode('-', $filterMonthYear);
         $carbonMonth = Carbon::createFromDate($year, $month, 1);
 
+        $latestLwd = Incident::where('category_id', 3)
+            ->latest('date')
+            ->first();
+
+        $sinceLwd = $latestLwd
+            ? floor(Carbon::parse($latestLwd->date)->floatDiffInDays(Carbon::now()))
+            : 0;
+
         $agcLevels = AgcLevelHistory::with('agc')
-            ->whereMonth('date', $month)
-            ->whereYear('date', $year)
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
             ->paginate(10);
 
 
@@ -79,7 +87,8 @@ class MainController extends Controller
             'month' => $carbonMonth->format('F'),
             'year' => $year,
             'now' => $now->format('F Y'),
-            'user' => $user
+            'user' => $user,
+            'sinceLwd' => $sinceLwd,
         ];
         return view('agc', $data);
     }
@@ -88,46 +97,40 @@ class MainController extends Controller
     {
         $user = Auth::user();
         $now = Carbon::now();
+        $year = $now->year;
 
-        $filterMonthYear = $request->input('filterMonthYear', $now->format('Y-m'));
-        [$year, $month] = explode('-', $filterMonthYear);
-        $carbonMonth = Carbon::createFromDate($year, $month, 1);
         $picas = Pica::with('image')
             ->where('type', 1)
             ->whereYear('date_start', $year)
-            ->whereMonth('date_start', $month)
             ->paginate(10);
 
 
         $data = [
             'picas' => $picas,
-            'month' => $carbonMonth->format('F'),
-            'year' => $year,
-            'now' => Carbon::createFromDate($year, $month)->format('F Y'),
+            'year'   => $year,
+            'now'    => $now->format('Y'),
             'user' => $user
         ];
 
         return view('pica-admin', $data);
     }
-    public function issueAdmin(Request $request)
+    public function issueAdmin()
     {
         $user = Auth::user();
         $now = Carbon::now();
 
-        $filterMonthYear = $request->input('filterMonthYear', $now->format('Y-m'));
-        [$year, $month] = explode('-', $filterMonthYear);
-        $carbonMonth = Carbon::createFromDate($year, $month, 1);
+        $year = $now->year;
+
         $issues = Pica::with('image')
             ->where('type', 2)
+            ->whereYear('date_start', $year)
             ->paginate(10);
-
 
         $data = [
             'issues' => $issues,
-            'month' => $carbonMonth->format('F'),
-            'year' => $year,
-            'now' => Carbon::createFromDate($year, $month)->format('F Y'),
-            'user' => $user
+            'year'   => $year,
+            'now'    => $now->format('Y'),
+            'user'   => $user,
         ];
 
         return view('issue-admin', $data);

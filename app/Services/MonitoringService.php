@@ -217,13 +217,13 @@ class MonitoringService
         $now = Carbon::now()->format('m');
 
         $agc = AgcLevelHistory::with('agc')
-            ->whereMonth('date', $now)
+            ->whereMonth('created_at', $now)
             ->latest('id')
             ->first();
 
 
         $latestLwd = Incident::where('category_id', 3)
-            ->latest('date')
+            ->latest('created_at')
             ->first();
 
         $sinceLwd = $latestLwd
