@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('picas', function (Blueprint $table) {
             $table->id();
-            $table->date('date_start');
+            $table->integer('type')->index();
+            $table->string('title')->nullable();
+            $table->date('date_start')->nullable();
             $table->date('date_end')->nullable();
             $table->timestamps();
         });

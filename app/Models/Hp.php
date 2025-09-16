@@ -12,7 +12,7 @@ class Hp extends Model
     protected $fillable =
     [
         'npk',
-        'no_hp',
+        'hp',
     ];
 
     public function user(): BelongsTo

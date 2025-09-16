@@ -6,6 +6,7 @@ use App\Models\Accident;
 use App\Models\AgcLevel;
 use App\Models\AgcLevelHistory;
 use App\Models\Incident;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,12 +19,24 @@ class AgcLevelService
     {
         DB::beginTransaction();
         try {
-            $lossday = $request->loss_day;
-            $total_accident = $request->total_accident;
-            $accident_hours = $request->accident_hours;
+            // paksa semua nilai jadi integer (default 0 kalau kosong/null)
+            $lossday        = (int) ($request->loss_day ?? 0);
+            $total_accident = (int) ($request->total_accident ?? 0);
+            $man_power      = (int) ($request->man_power ?? 0);
+            $sinceLwd       = (int) ($request->accident_days ?? 0);
+            $work_hours_fr  = (int) ($request->work_hours_fr ?? 0);
+            $work_hours_sr  = (int) ($request->work_hours_sr ?? 0);
 
-            $fr = ($total_accident / $accident_hours) * 1000000;
-            $sr = ($lossday / $accident_hours) * 1000000;
+            $accident_hours_non_lti = $man_power * 8 * $sinceLwd;
+
+            // Cegah pembagian dengan nol
+            $fr = ($work_hours_fr > 0) 
+                ? round(($total_accident / $work_hours_fr) * 1000000, 2) 
+                : 0;
+
+            $sr = ($work_hours_sr > 0) 
+                ? round(($lossday / $work_hours_sr) * 1000000, 2) 
+                : 0;
 
             $frLevel = AgcLevel::matchFr($fr)->first();
             $srLevel = AgcLevel::matchSr($sr)->first();
@@ -35,13 +48,14 @@ class AgcLevelService
             }
 
             $agcHistory = AgcLevelHistory::create([
-                'agc_level_id' => $matchedLevel?->id,
-                'date'         => $request->date,
-                'total_accident'           => $total_accident,
-                'loss_day'           => $request->loss_day,
-                'fr'           => $fr,
-                'sr'           => $sr,
-                'accident_hours'           => $accident_hours,
+                'agc_level_id'           => $matchedLevel?->id,
+                'total_accident'         => $total_accident,
+                'loss_day'               => $lossday,
+                'fr'                     => $fr,
+                'sr'                     => $sr,
+                'man_power'              => $man_power,
+                'accident_hours_non_lti' => $accident_hours_non_lti,
+                'work_hours'             => $work_hours_fr,
             ]);
 
             DB::commit();
@@ -66,11 +80,23 @@ class AgcLevelService
         $agc = AgcLevelHistory::where('id', $request->id)->first();
         DB::beginTransaction();
         try {
-            $lossday = $request->loss_day;
-            $total_accident = $request->total_accident;
+            $lossday        = (int) ($request->loss_day ?? 0);
+            $total_accident = (int) ($request->total_accident ?? 0);
+            $man_power      = (int) ($request->man_power ?? 0);
+            $sinceLwd       = (int) ($request->accident_days ?? 0);
+            $work_hours_fr  = (int) ($request->work_hours_fr ?? 0);
+            $work_hours_sr  = (int) ($request->work_hours_sr ?? 0);
 
-            $fr = ($total_accident / $total_accident) * 1000000;
-            $sr = ($lossday / $total_accident) * 1000000;
+            $accident_hours_non_lti = $man_power * 8 * $sinceLwd;
+
+            // Cegah pembagian dengan nol
+            $fr = ($work_hours_fr > 0) 
+                ? round(($total_accident / $work_hours_fr) * 1000000, 2) 
+                : 0;
+
+            $sr = ($work_hours_sr > 0) 
+                ? round(($lossday / $work_hours_sr) * 1000000, 2) 
+                : 0;
 
             $frLevel = AgcLevel::matchFr($fr)->first();
             $srLevel = AgcLevel::matchSr($sr)->first();
@@ -81,15 +107,15 @@ class AgcLevelService
                 $matchedLevel = $frLevel ?? $srLevel;
             }
 
-            $updateAgc =  $agc->update([
-                'agc_level_id' => $matchedLevel?->id,
-                'date'         => $request->date,
-                'total_accident'           => $total_accident,
-                'loss_day'           => $request->loss_day,
-                'fr'           => $fr,
-                'sr'           => $sr,
-                'accident_hours'  => $request->accident_hours,
-
+            $updateAgc = $agc->update([
+                'agc_level_id'           => $matchedLevel?->id,
+                'total_accident'         => $total_accident,
+                'loss_day'               => $lossday,
+                'fr'                     => $fr,
+                'sr'                     => $sr,
+                'man_power'              => $man_power,
+                'accident_hours_non_lti' => $accident_hours_non_lti,
+                'work_hours'             => $work_hours_fr,
             ]);
 
             DB::commit();
@@ -101,7 +127,6 @@ class AgcLevelService
             ];
         } catch (Exception $e) {
             DB::rollBack();
-
             return [
                 'success' => false,
                 'message' => 'Failed to update data accident.',
@@ -109,6 +134,7 @@ class AgcLevelService
             ];
         }
     }
+
     public function delete(Request $request): array
     {
         $agc = AgcLevelHistory::where('id', $request->id)->first();
