@@ -59,6 +59,13 @@ class MainController extends Controller
         $data = $service->monitoring();
         return view('monitoring', $data);
     }
+    public function asakai()
+    {
+
+        $service = new MonitoringService();
+        $data = $service->monitoring();
+        return view('asakai', $data);
+    }
 
     public function agc(Request $request)
     {

@@ -19,15 +19,34 @@
     <div class="container-fluid py-1 px-3 d-flex align-items-center justify-content-between flex-wrap">
 
         <div class="d-flex align-items-center">
-            <a href="/" class="d-flex align-items-center">
+            <a href="http://172.16.16.253/indi40/safety-performance-board/public/index.php" class="d-flex align-items-center">
                 <img src="{{ asset('img/logo.png') }}" alt="Logo" class="img-fluid"
                     style="max-width: 120px; height: auto;">
             </a>
         </div>
 
-        <div class="flex-grow-1 mx-4 py-3 text-center d-none d-lg-block" style="background-color: #06923E">
+        <!-- <div class="flex-grow-1 mx-4 py-3 text-center d-none d-lg-block" style="background-color: #06923E">
             <h2 class="mb-0 fw-bold text-white" style="letter-spacing: 2px;">SAFETY INFORMATION BOARD</h2>
+        </div> -->
+
+        <div class="flex-grow-1 mx-4 py-3 text-center d-none d-lg-block" style="background-color: #06923E">
+            <h2 class="mb-0 fw-bold text-white fade-text" style="letter-spacing: 2px;">
+                SAFETY INFORMATION BOARD
+            </h2>
         </div>
+
+        <style>
+        .fade-text {
+            animation: fadeInOut 4s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            25% { opacity: 1; }   /* muncul */
+            75% { opacity: 1; }   /* tetap terlihat sebentar */
+            100% { opacity: 0; }  /* hilang lagi */
+        }
+        </style>
 
         <div class="d-flex align-items-center">
             <span class="py-2 me-4 ">

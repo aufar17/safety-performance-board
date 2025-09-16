@@ -4,7 +4,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/apple-icon.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
     <title>
-        Safety Performance Board
+        EHS PT KYBI
     </title>
     <link href="{{ asset('css/opensans.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/host-grotesk.css') }}" rel="stylesheet">

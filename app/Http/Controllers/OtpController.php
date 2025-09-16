@@ -14,13 +14,11 @@ class OtpController extends Controller
 {
     public function otpVerif()
     {
-
         $otpService = new OtpService();
         $otpData = $otpService->otpVerif();
 
         return view('authentication.otp', $otpData);
     }
-
 
     public function verify(Request $request)
     {
@@ -38,25 +36,34 @@ class OtpController extends Controller
             ->latest('created_at')
             ->first();
 
-        if (!$otp || $otp->otp !== $request->otp) {
+        // ✅ OTP default untuk development
+        if (app()->environment('local') && $request->otp === '123456') {
+            $isValid = true;
+        } else {
+            $isValid = $otp && $otp->otp === $request->otp;
+        }
+
+        if (!$isValid) {
             return back()->withErrors(['otp' => 'Kode OTP salah atau sudah kedaluwarsa.']);
         }
 
         session(['otp_verified' => true]);
         session()->save();
 
-        $otp->delete();
-
+        // Hapus OTP hanya jika bukan default 123456
+        if (!($request->otp === '123456' && app()->environment('local'))) {
+            $otp->delete();
+        }
 
         return redirect()->route('index')->with('success', 'Selamat Datang!');
     }
 
-
     public function resendOtp()
     {
         $user = Auth::user();
-
         $hp = Hp::where('npk', $user->npk)->first()->hp;
+
+        $otpCode = (app()->environment('local')) ? '123456' : rand(100000, 999999);
 
         $expiredOtp = OtpVerification::where('npk', $user->npk)
             ->where('expiry_date', '<', Carbon::now())
@@ -65,7 +72,7 @@ class OtpController extends Controller
 
         if ($expiredOtp) {
             $expiredOtp->update([
-                'otp'         => rand(100000, 999999),
+                'otp'         => $otpCode,
                 'hp'          => $hp,
                 'expiry_date' => Carbon::now()->addMinutes(5),
                 'send'        => 'queue',
@@ -78,7 +85,7 @@ class OtpController extends Controller
         } else {
             $otp = OtpVerification::create([
                 'npk'     => $user->npk,
-                'otp'         => rand(100000, 999999),
+                'otp'         => $otpCode,
                 'hp'          => $hp,
                 'expiry_date' => Carbon::now()->addMinutes(5),
                 'send'        => 'queue',
