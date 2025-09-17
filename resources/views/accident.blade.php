@@ -41,29 +41,35 @@
     <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
         <x-navbar title="Accident" breadcumb="Accident" :user="$user" />
         <div class="container-fluid p-5">
+            @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
             <x-card title="{{ $month }} {{ $year }} Accident" icon="fa-solid fa-person-falling">
-                @if (session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
-
-                @if (session('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
-                @endif
-
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newAccidentModal">
-                    New Accident
+                <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal"
+                    data-bs-target="#newAccidentModal">
+                    <i class="fa-solid fa-plus me-2"></i> New Accident
                 </button>
-
-                <div class="row mb-3 align-items-end">
-                    <div class="col-sm-2">
-                        <label for="filterMonthYear" class="form-label">PERIODE</label>
-                        <form action="{{ route('accident') }}" method="GET">
-                            <input type="month" name="filterMonthYear"
-                                value="{{ request('filterMonthYear',  now()->format('Y-m')), }}"
-                                class="form-control form-control-sm" onchange="this.form.submit()">
-                        </form>
+                <form action="{{ route('simulation') }}" method="POST" id="simulationForm">
+                    @csrf
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <div class="form-check form-switch d-flex align-items-center">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                    id="flexSwitchCheckDefault" name="simulation" {{
+                                    session('dailySimulation')[now()->format('Y-m-d')] ?? false ? 'checked' : '' }}>
+                                <label class="form-check-label ms-2 mb-0 fw-semibold" for="flexSwitchCheckDefault">
+                                    Simulasi Tanggap Darurat
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
+
+
 
                 <div class="table-responsive">
                     <table id="accident" class="table table-bordered table-striped table-hover">
@@ -298,6 +304,12 @@
             }
         });
     });
+        </script>
+        <script>
+            const switchInput = document.getElementById('flexSwitchCheckDefault');
+                switchInput.addEventListener('change', function() {
+                    document.getElementById('simulationForm').submit();
+            });
         </script>
 </body>
 

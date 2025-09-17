@@ -1,33 +1,20 @@
-<!--
-=========================================================
-* Soft UI Dashboard - v1.0.3
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-
-* Coded by Creative Tim
-
-=========================================================
-    
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en">
 
 <x-head></x-head>
+<style>
+    body {
+        zoom: 0.6;
+    }
+</style>
 
 <body class="g-sidenav-show bg-gray-100 d-flex flex-column min-vh-100">
 
-    <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg">
-
+    <!-- 🔹 Tambah flex-grow-1 di sini -->
+    <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg flex-grow-1">
 
         <x-navbar-monitoring title="Dashboard" breadcumb="Dashboard" />
-        <div class="container-fluid pb-2
-        ">
-            {{-- <h2 class="text-center text-uppercase mb-4" style="letter-spacing: 2px;">Safety Performance Board</h2>
-            --}}
+        <div class="container-fluid pb-2">
 
             <div class="row justify-content-between gy-2">
                 <div class="col-lg-8 col-md-12 px-4 text-center">
@@ -45,6 +32,8 @@
                     </a>
                 </div>
             </div>
+
+
 
             <div class="row mt-3">
                 <div class="col-lg-4 col-md-12 px-4">
@@ -80,6 +69,7 @@
                             :agc="$agc['agc']" :sinceLwd="$agc['sinceLwd']" />
                     </div>
                 </div>
+
                 <div class="col-lg-4 col-md-12 mt-4 mt-lg-0 px-4">
                     <div class="text-center">
                         <h4 class="text-uppercase fw-bolder" style="letter-spacing: 1px; color:#347433;">Safety Calendar
@@ -90,22 +80,22 @@
                     </div>
                     <div class="row g-4 align-items-stretch">
                         <x-calender title="Legend" icon="fa-solid fa-calendar" :bulan="$calender['bulan']"
-                            :tanggalList="$calender['tanggalList']" :days=" $calender['days']" />
+                            :tanggalList="$calender['tanggalList']" :days="$calender['days']" />
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-
-    <x-footer></x-footer>
+    <x-footer class="mt-auto" />
 
     <x-script />
     @stack('scripts')
     <script>
         setTimeout(() => {
             location.reload();
-        }, 300000); 
+        }, 180000);
+
     </script>
 
 </body>

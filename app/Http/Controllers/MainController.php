@@ -31,8 +31,6 @@ class MainController extends Controller
         [$year, $month] = explode('-', $filterMonthYear);
         $carbonMonth = Carbon::createFromDate($year, $month, 1);
         $incidents = Incident::with('accident', 'category')
-            ->whereYear('date', $year)
-            ->whereMonth('date', $month)
             ->paginate(10);
 
         $accidents = Accident::all();
@@ -54,10 +52,31 @@ class MainController extends Controller
 
     public function monitoring()
     {
+        $service = new MonitoringService();
+        $data = $service->monitoring();
+
+        $dailySimulation = session('dailySimulation', []);
+        $today = now()->format('Y-m-d');
+        $hasSimulationToday = $dailySimulation[$today] ?? false;
+
+        return view('monitoring', $data + [
+            'hasSimulationToday' => $hasSimulationToday,
+        ]);
+    }
+
+    public function asakai()
+    {
 
         $service = new MonitoringService();
         $data = $service->monitoring();
-        return view('monitoring', $data);
+
+        $dailySimulation = session('dailySimulation', []);
+        $today = now()->format('Y-m-d');
+        $hasSimulationToday = $dailySimulation[$today] ?? false;
+
+        return view('asakai', $data + [
+            'hasSimulationToday' => $hasSimulationToday,
+        ]);
     }
 
     public function agc(Request $request)
@@ -77,8 +96,6 @@ class MainController extends Controller
             : 0;
 
         $agcLevels = AgcLevelHistory::with('agc')
-            ->whereMonth('created_at', $month)
-            ->whereYear('created_at', $year)
             ->paginate(10);
 
 
@@ -101,7 +118,6 @@ class MainController extends Controller
 
         $picas = Pica::with('image')
             ->where('type', 1)
-            ->whereYear('date_start', $year)
             ->paginate(10);
 
 
@@ -123,7 +139,6 @@ class MainController extends Controller
 
         $issues = Pica::with('image')
             ->where('type', 2)
-            ->whereYear('date_start', $year)
             ->paginate(10);
 
         $data = [

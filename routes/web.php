@@ -26,6 +26,7 @@ Route::get('pica-admin', [MainController::class, 'picaAdmin'])->name('pica-admin
 Route::get('issue-admin', [MainController::class, 'issueAdmin'])->name('issue-admin');
 
 //ACCIDENT FEATURES
+Route::post('simulation', [AccidentController::class, 'simulation'])->name('simulation');
 Route::post('accident-post', [AccidentController::class, 'accidentPost'])->name('accident-post');
 Route::post('accident-update', [AccidentController::class, 'accidentUpdate'])->name('accident-update');
 Route::post('accident-delete', [AccidentController::class, 'accidentDelete'])->name('accident-delete');
