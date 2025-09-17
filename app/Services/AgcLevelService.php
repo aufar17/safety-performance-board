@@ -48,7 +48,6 @@ class AgcLevelService
             }
 
             $agcHistory = AgcLevelHistory::create([
-<<<<<<<<< Temporary merge branch 1
                 'agc_level_id' => $matchedLevel?->id,
                 'total_accident'           => $total_accident,
                 'loss_day'           => $request->loss_day,
@@ -57,7 +56,7 @@ class AgcLevelService
                 'man_power'           => $man_power,
                 'accident_hours_non_lti'           => $accident_hours_non_lti,
                 'work_hours'           => $work_hours_fr,
-=========
+
                 'agc_level_id'           => $matchedLevel?->id,
                 'total_accident'         => $total_accident,
                 'loss_day'               => $lossday,
@@ -66,7 +65,6 @@ class AgcLevelService
                 'man_power'              => $man_power,
                 'accident_hours_non_lti' => $accident_hours_non_lti,
                 'work_hours'             => $work_hours_fr,
->>>>>>>>> Temporary merge branch 2
             ]);
             DB::commit();
 
@@ -90,19 +88,6 @@ class AgcLevelService
         $agc = AgcLevelHistory::where('id', $request->id)->first();
         DB::beginTransaction();
         try {
-<<<<<<<<< Temporary merge branch 1
-            $lossday = $request->loss_day;
-            $total_accident = $request->total_accident;
-            $man_power = $request->man_power;
-            $sinceLwd = $request->accident_days;
-            $work_hours_fr = $request->work_hours_fr;
-            $work_hours_sr = $request->work_hours_sr;
-
-            $accident_hours_non_lti = $man_power * 8 * $sinceLwd;
-
-            $fr = round(($total_accident / $work_hours_fr) * 1000000, 2);
-            $sr = round(($lossday / $work_hours_sr) * 1000000, 2);
-=========
             $lossday        = (int) ($request->loss_day ?? 0);
             $total_accident = (int) ($request->total_accident ?? 0);
             $man_power      = (int) ($request->man_power ?? 0);
@@ -113,14 +98,13 @@ class AgcLevelService
             $accident_hours_non_lti = $man_power * 8 * $sinceLwd;
 
             // Cegah pembagian dengan nol
-            $fr = ($work_hours_fr > 0) 
-                ? round(($total_accident / $work_hours_fr) * 1000000, 2) 
+            $fr = ($work_hours_fr > 0)
+                ? round(($total_accident / $work_hours_fr) * 1000000, 2)
                 : 0;
 
-            $sr = ($work_hours_sr > 0) 
-                ? round(($lossday / $work_hours_sr) * 1000000, 2) 
+            $sr = ($work_hours_sr > 0)
+                ? round(($lossday / $work_hours_sr) * 1000000, 2)
                 : 0;
->>>>>>>>> Temporary merge branch 2
 
             $frLevel = AgcLevel::matchFr($fr)->first();
             $srLevel = AgcLevel::matchSr($sr)->first();
@@ -131,18 +115,6 @@ class AgcLevelService
                 $matchedLevel = $frLevel ?? $srLevel;
             }
 
-<<<<<<<<< Temporary merge branch 1
-            $updateAgc =  $agc->update([
-                'agc_level_id' => $matchedLevel?->id,
-                'total_accident'           => $total_accident,
-                'loss_day'           => $request->loss_day,
-                'fr'           => $fr,
-                'sr'           => $sr,
-                'man_power'           => $man_power,
-                'accident_hours_non_lti'           => $accident_hours_non_lti,
-                'work_hours'           => $work_hours_fr,
-
-=========
             $updateAgc = $agc->update([
                 'agc_level_id'           => $matchedLevel?->id,
                 'total_accident'         => $total_accident,
@@ -152,7 +124,6 @@ class AgcLevelService
                 'man_power'              => $man_power,
                 'accident_hours_non_lti' => $accident_hours_non_lti,
                 'work_hours'             => $work_hours_fr,
->>>>>>>>> Temporary merge branch 2
             ]);
 
             DB::commit();
@@ -164,11 +135,6 @@ class AgcLevelService
             ];
         } catch (Exception $e) {
             DB::rollBack();
-<<<<<<<<< Temporary merge branch 1
-            dd($e);
-
-=========
->>>>>>>>> Temporary merge branch 2
             return [
                 'success' => false,
                 'message' => 'Failed to update data accident.',
