@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class CTUser extends Authenticatable
 {
     protected $connection = 'mysql2';
-    protected $table = 'ct_users';
+    protected $table = 'ct_users_hash';
     protected $primaryKey = 'npk'; // penting!
     public $incrementing = false; // penting!
     protected $keyType = 'string'; // penting!

@@ -2,6 +2,11 @@
 <html lang="en">
 
 <x-head></x-head>
+<style>
+    body {
+        zoom: 0.6;
+    }
+</style>
 
 <body class="g-sidenav-show bg-gray-100 d-flex flex-column min-vh-100">
 
@@ -12,19 +17,23 @@
         <div class="container-fluid pb-2">
 
             <div class="row justify-content-between gy-2">
-                <div class="col-lg-4 col-md-12 px-4 text-center">
-                    <div class="update-tanggal marquee w-100">
-                        <span>Update Tanggal : <span class="tanggal">{{ $now }}</span></span>
+                <div class="col-lg-8 col-md-12 px-4 text-center">
+                    <div class="d-flex align-items-center justify-content-center w-100 h-100 py-1 rounded-3 shadow text-white text-uppercase fw-bold fs-4"
+                        style="background: linear-gradient(135deg, #5d5f69ff, #494c4dff);">
+                        Update Tanggal : <span class="badge bg-light text-dark ms-2">{{ $now }}</span>
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-12 text-center d-flex justify-content-center px-4">
+                <div class="col-lg-4 col-md-12 px-4 text-center">
                     <a href="{{ route('issue') }}"
-                        class="btn-issue-modern text-uppercase fw-bold mb-2 px-3 py-2 w-50 fs-6 d-flex align-items-center justify-content-center">
+                        class="btn w-100 h-100 py-1 fs-5 rounded-3 shadow text-white text-uppercase fw-bold d-flex align-items-center justify-content-center"
+                        style="background-color: #FB4141">
                         <i class="fa-solid fa-hand-pointer me-2"></i> Safety Issue
                     </a>
                 </div>
             </div>
+
+
 
             <div class="row mt-3">
                 <div class="col-lg-4 col-md-12 px-4">
@@ -35,9 +44,18 @@
                     <div class="row g-4 align-items-stretch">
                         <div class="col-12"></div>
                         @foreach ($mappings as $mapping)
-                            <x-accident-information :title="$mapping['accident']" :total="$mapping['total']"
-                                :category="$mapping['categories']" :icon="$mapping['icon']" />
+                        <x-accident-information :title="$mapping['accident']" :total="$mapping['total']"
+                            :category="$mapping['categories']" :icon="$mapping['icon']" />
                         @endforeach
+                    </div>
+                    <div class="col-12 mt-3">
+                        <div class="d-flex align-items-center justify-content-center w-100 h-100 py-3 rounded-1 shadow text-white text-uppercase fw-bold fs-4"
+                            style="background-color: #FB4141;border-radius: 12px;">
+                            @if ($hasSimulationToday)
+                            <span class="text-uppercase">Hari ini simulasi tanggap darurat</span>
+                            @endif
+                            <span class="text-uppercase">Hari ini tidak ada simulasi</span>
+                        </div>
                     </div>
                 </div>
 
@@ -69,91 +87,16 @@
         </div>
     </main>
 
-    <!-- 🔹 Footer otomatis nempel di bawah -->
     <x-footer class="mt-auto" />
 
     <x-script />
     @stack('scripts')
     <script>
-        // Auto refresh tiap 5 menit (300000ms)
         setTimeout(() => {
             location.reload();
         }, 180000);
 
     </script>
-
-    <style>
-        /* ✅ Zoom untuk TV tanpa ganggu flexbox */
-        body {
-            zoom: 0.6; /* 60% zoom */
-        }
-
-        .update-tanggal {
-            display: block;
-            overflow: hidden;
-            white-space: nowrap;
-            font-size: 15px;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #5d5f69ff, #494c4dff);
-            color: #fff;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: left;
-            position: relative;
-        }
-
-        .update-tanggal span {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 12s linear infinite;
-        }
-
-        @keyframes marquee {
-            0% {
-                transform: translateX(0%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        .tanggal {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 12px;
-            border-radius: 8px;
-            margin-left: 8px;
-            font-weight: 600;
-        }
-
-        .btn-issue-modern {
-            background: linear-gradient(135deg, #5d5f69ff, #494c4dff);
-            color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            padding: 8px 18px;
-            font-size: 0.95rem;
-        }
-
-        .btn-issue-modern:hover {
-            background: linear-gradient(135deg, #494c4dff, #3a3c3dff);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
-            transform: translateY(-2px) scale(1.02);
-            color: #fff;
-        }
-
-        .btn-issue-modern:active {
-            transform: translateY(1px) scale(0.96);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-        }
-    </style>
 
 </body>
 

@@ -7,6 +7,23 @@ use Illuminate\Http\Request;
 
 class AccidentController extends Controller
 {
+
+    public function simulation(Request $request)
+    {
+        $simulasi = $request->has('simulation');
+        $today = now()->format('Y-m-d');
+
+        $dailySimulation = session('dailySimulation', []);
+        $dailySimulation[$today] = $simulasi;
+        session(['dailySimulation' => $dailySimulation]);
+
+        $message = $simulasi
+            ? 'Today is emergency response simulation.'
+            : 'Emergency response simulation canceled.';
+
+        return redirect()->back()->with('success', $message);
+    }
+
     public function accidentPost(Request $request)
     {
         $service = new AccidentService();
