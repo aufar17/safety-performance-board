@@ -81,13 +81,13 @@
                         <img src="{{ asset('img/logo.png') }}" alt="">
                     </div>
                     @if (session('error'))
-                    <div class="alert alert-danger text-dark text-center">
+                    <div class="alert alert-danger text-white text-center">
                         {{ session('error') }}
                     </div>
                     @endif
 
                     @if ($errors->has('captcha'))
-                    <div class="alert alert-danger text-dark text-center">Captcha tidak sesuai</div>
+                    <div class="alert alert-danger text-white text-center">Captcha tidak sesuai</div>
                     @endif
                     <div class="row no-gutters d-flex flex-column align-items-center">
                         <div class="container-main shadow-lg">

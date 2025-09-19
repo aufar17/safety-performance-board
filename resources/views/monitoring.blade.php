@@ -64,8 +64,9 @@
                             style="background-color: #FB4141;border-radius: 12px;">
                             @if ($hasSimulationToday)
                             <span class="text-uppercase">Hari ini simulasi tanggap darurat</span>
-                            @endif
+                            @else
                             <span class="text-uppercase">Hari ini tidak ada simulasi</span>
+                            @endif
                         </div>
                     </div>
                 </div>
