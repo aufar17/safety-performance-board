@@ -21,12 +21,12 @@ Route::post('resend-otp', [OtpController::class, 'resendOtp'])->name('resend-otp
 Route::get('/', [MainController::class, 'index'])->name('index');
 Route::get('accident', [MainController::class, 'accident'])->name('accident');
 Route::get('monitoring', [MainController::class, 'monitoring'])->name('monitoring');
+Route::get('asakai', [MainController::class, 'asakai'])->name('asakai');
 Route::get('agc', [MainController::class, 'agc'])->name('agc');
 Route::get('pica-admin', [MainController::class, 'picaAdmin'])->name('pica-admin');
 Route::get('issue-admin', [MainController::class, 'issueAdmin'])->name('issue-admin');
 
 //ACCIDENT FEATURES
-Route::post('simulation', [AccidentController::class, 'simulation'])->name('simulation');
 Route::post('accident-post', [AccidentController::class, 'accidentPost'])->name('accident-post');
 Route::post('accident-update', [AccidentController::class, 'accidentUpdate'])->name('accident-update');
 Route::post('accident-delete', [AccidentController::class, 'accidentDelete'])->name('accident-delete');
