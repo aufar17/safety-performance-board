@@ -1,9 +1,8 @@
 @props([
 'title',
 'icon',
-'category',
-'total',
-'count' => [],
+'category' => [],
+'total' => 0,
 ])
 
 @php
@@ -39,11 +38,11 @@ $count = [
                     <div class="row gy-2">
                         <div class="col-6 text-uppercase fw-bolder">First Aid</div>
                         <div class="col-6 text-white text-center border border-white" style="background-color: #001BB7">
-                            {{ $count['First Aid'] ?? 0 }}
+                            {{ $count['First Aid'] }}
                         </div>
                         <div class="col-6 text-uppercase fw-bolder">Non LWD</div>
                         <div class="col-6 text-white text-center border border-white" style="background-color: #001BB7">
-                            {{ $count['Non LWD'] ?? 0 }}
+                            {{ $count['Non LWD'] }}
                         </div>
                     </div>
                 </div>
@@ -52,11 +51,11 @@ $count = [
                     <div class="row gy-2">
                         <div class="col-6 text-uppercase fw-bolder">LWD</div>
                         <div class="col-6 text-white text-center border border-white" style="background-color: #001BB7">
-                            {{ $count['LWD'] ?? 0 }}
+                            {{ $count['LWD'] }}
                         </div>
                         <div class="col-6 text-uppercase fw-bolder">Fatal</div>
                         <div class="col-6 text-white text-center border border-white" style="background-color: #001BB7">
-                            {{ $count['Fatal'] ?? 0 }}
+                            {{ $count['Fatal'] }}
                         </div>
                     </div>
                 </div>

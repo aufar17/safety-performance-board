@@ -73,37 +73,38 @@
     <main class="d-flex flex-grow-1 align-items-center justify-content-center">
         <section class="flex-grow-1">
             <div class="page-header min-vh-75">
-                @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
-
-                @if (session('error'))
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <div class="alert alert-danger">{{ session('error') }}</div>
-                    </div>
-                </div>
-                @endif
-                @if(session('message'))
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <div class="alert alert-success">{{ session('message') }}</div>
-                    </div>
-                </div>
-                @endif
-
                 <div class="wrapper">
+                    @if ($errors->any())
+                    <div class="alert alert-danger mb-3">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                            <li class="text-white">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
+                    @if (session('error'))
+                    <div class="alert alert-danger mb-3">
+                        {{ session('error') }}
+                    </div>
+                    @endif
+
+                    @if (session('message'))
+                    <div class="alert alert-success mb-3">
+                        {{ session('message') }}
+                    </div>
+                    @endif
                     <div class="container-main shadow-lg p-5 text-center w-100 col-lg-6 col-md-8 col-sm-10 mx-auto">
+
+
+                        {{-- END ALERT SECTION --}}
+
                         <header class="mb-4">
                             <h3 class="text-dark">Verifikasi OTP</h3>
                             <p class="text-dark">Masukkan kode OTP yang telah dikirim ke nomor Anda</p>
                         </header>
+
                         <form action="{{ route('verify-otp') }}" method="POST" id="otp-form">
                             @csrf
                             <div class="otp-input-container d-flex justify-content-center gap-2 mb-4">
@@ -117,6 +118,7 @@
                             <input type="hidden" name="otp" id="otp_combined">
                             <button type="submit" class="btn btn-danger w-100 mt-3">Verifikasi</button>
                         </form>
+
                         <div class="d-flex align-items-center justify-content-center gap-2 mt-3 mb-3">
                             <form action="{{ route('resend-otp') }}" method="post" id="resend-form">
                                 @csrf
@@ -126,7 +128,6 @@
                                     </div>
                                     <div class="col-md-4">
                                         <button class="badge bg-success border-0">Resend OTP</button>
-
                                     </div>
                                 </div>
                             </form>
@@ -139,6 +140,8 @@
             </div>
         </section>
     </main>
+
+
     <!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
     <footer class="footer text-center mt-auto py-md-3">
         <div class="container">

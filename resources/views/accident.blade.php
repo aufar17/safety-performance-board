@@ -53,24 +53,41 @@
                     data-bs-target="#newAccidentModal">
                     <i class="fa-solid fa-plus me-2"></i> New Accident
                 </button>
-                <form action="{{ route('simulation') }}" method="POST" id="simulationForm">
-                    @csrf
-                    <div class="row mb-3">
-                        <div class="col-sm-4">
+                <div class="row d-flex justify-content-start">
+                    <div class="col-lg-2 d-flex justify-content-start">
+                        <form action="{{ route('simulation') }}" method="POST" id="simulationForm">
+                            @csrf
+                            <div class="row mb-3">
+                                <div class="col-sm-12">
+                                    <div class="form-check form-switch d-flex align-items-center">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                            id="flexSwitchCheckDefault" name="simulation" {{
+                                            session('dailySimulation')[now()->format('Y-m-d')] ?? false ? 'checked' : ''
+                                        }}>
+                                        <label class="form-check-label ms-2 mb-0 fw-semibold"
+                                            for="flexSwitchCheckDefault">
+                                            Simulasi Tanggap Darurat
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-2 d-flex justify-content-start">
+                        <form action="{{ route('is-all-active') }}" method="POST">
+                            @csrf
                             <div class="form-check form-switch d-flex align-items-center">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                    id="flexSwitchCheckDefault" name="simulation" {{
-                                    session('dailySimulation')[now()->format('Y-m-d')] ?? false ? 'checked' : '' }}>
-                                <label class="form-check-label ms-2 mb-0 fw-semibold" for="flexSwitchCheckDefault">
-                                    Simulasi Tanggap Darurat
+                                <input class="form-check-input" type="checkbox" role="switch" id="activeAllSwitch"
+                                    name="activeAll" onchange="this.form.submit()" {{ session('isActiveAll', false)
+                                    ? 'checked' : '' }}>
+                                <label class="form-check-label ms-2 fw-semibold" for="activeAllSwitch">
+                                    Active All
                                 </label>
                             </div>
-                        </div>
+                        </form>
+
                     </div>
-                </form>
-
-
-
+                </div>
                 <div class="table-responsive">
                     <table id="accident" class="table table-bordered table-striped table-hover">
                         <thead>
@@ -80,6 +97,7 @@
                                 <th>Category</th>
                                 <th>Description</th>
                                 <th>Date</th>
+                                <th>Active</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -190,6 +208,18 @@
                                 <td>{{ $incident->category->category }}</td>
                                 <td>{{ $incident->description }}</td>
                                 <td>{{ $incident->date }}</td>
+                                <td class="text-center">
+                                    <form action="{{ route('is-active', $incident->id) }}" method="POST">
+                                        @csrf
+                                        <div class="form-check form-switch d-flex align-items-center">
+                                            <input class="form-check-input" type="checkbox" role="switch"
+                                                name="simulation" onchange="this.form.submit()" {{
+                                                in_array($incident->id, session('activeAccidents', [])) ? 'checked' : ''
+                                            }}>
+                                        </div>
+                                    </form>
+                                </td>
+
                                 <td>
                                     <button class="badge bg-warning border-0" data-bs-toggle="modal"
                                         data-bs-target="#editAccidentModal{{ $incident->id }}">
