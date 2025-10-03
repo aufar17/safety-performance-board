@@ -151,7 +151,8 @@ class MonitoringService
 
         $groupedByAccident = $incidents->groupBy('accident_id');
 
-        $results = [];
+        $tableData = [];
+        $chartData = [];
 
         foreach ($accidents as $accident) {
             $accIncidents = $groupedByAccident->get($accident->id, collect());
@@ -161,22 +162,27 @@ class MonitoringService
                 ->map(fn($group) => $group->count())
                 ->toArray();
 
+            $tableData[$accident->accident] = [
+                'data' => array_map(fn($i) => $monthlyCounts[$i] ?? 0, range(1, $currentMonth)),
+            ];
             $runningTotal = 0;
             $accumulated = [];
-
             for ($i = 1; $i <= $currentMonth; $i++) {
                 $runningTotal += $monthlyCounts[$i] ?? 0;
                 $accumulated[] = $runningTotal;
             }
-
-            $results[$accident->accident] = [
-                'data'  => $accumulated,
+            $chartData[$accident->accident] = [
+                'data' => $accumulated,
                 'color' => $colorMap[$accident->id] ?? '#000000',
             ];
         }
 
-        return $results;
+        return [
+            'tableData' => $tableData,
+            'chartData' => $chartData,
+        ];
     }
+
 
 
     public function calendar(): array

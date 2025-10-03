@@ -35,7 +35,7 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($accumulativeAccident as $accident => $info)
+                        @foreach ($accumulativeAccident['tableData'] as $accident => $info)
                         <tr>
                             <td style="position: sticky; left: 0; background: #fff; z-index: 1;">{{ $accident }}</td>
                             @foreach ($info['data'] as $count)
@@ -61,7 +61,7 @@
             data: {
                 labels: @json($months),
                 datasets: [
-                    @foreach ($accumulativeAccident as $accident => $info)
+                    @foreach ($accumulativeAccident['chartData'] as $accident => $info)
                         {
                             label: '{{ $accident }}',
                             data: @json($info['data']),
