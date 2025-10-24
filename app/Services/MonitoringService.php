@@ -42,21 +42,22 @@ class MonitoringService
     public function mappings($year)
     {
         $isActiveAll = session('isActiveAll', false);
-
-        $incidentIds = collect(session('activeAccidents', []))
-            ->map(fn($v) => (int) $v)
-            ->unique()
-            ->values()
-            ->toArray();
+        $activeAccidents = collect(session('activeAccidents', []))->map(fn($v) => (int) $v)->unique()->values()->toArray();
+        $manuallyDisabled = collect(session('manuallyDisabled', []))->map(fn($v) => (int) $v)->unique()->values()->toArray();
 
         $accidents = Accident::all();
 
-        $query = Incident::with(['accident', 'category'])
-            ->whereYear('date', $year);
+        $query = Incident::with(['accident', 'category'])->whereYear('date', $year);
 
-        if (!$isActiveAll) {
-            if (!empty($incidentIds)) {
-                $query->whereIn('id', $incidentIds);
+        if ($isActiveAll) {
+            // Tampilkan semua, kecuali yang dinonaktifkan manual
+            if (!empty($manuallyDisabled)) {
+                $query->whereNotIn('id', $manuallyDisabled);
+            }
+        } else {
+            // Tampilkan hanya yang aktif
+            if (!empty($activeAccidents)) {
+                $query->whereIn('id', $activeAccidents);
             } else {
                 $incidents = collect();
             }
@@ -105,6 +106,7 @@ class MonitoringService
         return $mappings;
     }
 
+
     public function months()
     {
         $months = [];
@@ -119,12 +121,8 @@ class MonitoringService
     public function accumulativeAccident($year)
     {
         $isActiveAll = session('isActiveAll', false);
-
-        $incidentIds = collect(session('activeAccidents', []))
-            ->map(fn($v) => (int) $v)
-            ->unique()
-            ->values()
-            ->toArray();
+        $activeAccidents = collect(session('activeAccidents', []))->map(fn($v) => (int) $v)->unique()->values()->toArray();
+        $manuallyDisabled = collect(session('manuallyDisabled', []))->map(fn($v) => (int) $v)->unique()->values()->toArray();
 
         $currentMonth = now()->month;
 
@@ -139,9 +137,13 @@ class MonitoringService
         $query = Incident::whereYear('date', $year)
             ->whereMonth('date', '<=', $currentMonth);
 
-        if (!$isActiveAll) {
-            if (!empty($incidentIds)) {
-                $query->whereIn('id', $incidentIds);
+        if ($isActiveAll) {
+            if (!empty($manuallyDisabled)) {
+                $query->whereNotIn('id', $manuallyDisabled);
+            }
+        } else {
+            if (!empty($activeAccidents)) {
+                $query->whereIn('id', $activeAccidents);
             } else {
                 $incidents = collect();
             }
@@ -185,42 +187,46 @@ class MonitoringService
 
 
 
+
     public function calendar(): array
     {
         $carbon = Carbon::now()->locale('id');
         $bulan = $carbon->translatedFormat('F Y');
+        $hariDalamBulan = $carbon->daysInMonth;
 
+        $isActiveAll = session('isActiveAll', false);
+        $activeAccidents = collect(session('activeAccidents', []))
+            ->map(fn($v) => (int) $v)
+            ->unique()
+            ->values()
+            ->toArray();
+
+        // Ambil semua PICA
         $picaList = Pica::all();
 
-        $incidentList = Incident::with(['accident', 'category'])
+        // Ambil Incident sesuai filter session
+        $incidentQuery = Incident::with(['accident', 'category'])
             ->whereMonth('date', $carbon->month)
-            ->whereYear('date', $carbon->year)
-            ->get();
+            ->whereYear('date', $carbon->year);
 
-        $incidents = $incidentList->groupBy(fn($incident) => Carbon::parse($incident->date)->day);
+        if (!$isActiveAll) {
+            if (!empty($activeAccidents)) {
+                $incidentQuery->whereIn('id', $activeAccidents);
+            } else {
+                $incidentQuery->whereRaw('1 = 0'); // kosong
+            }
+        }
 
-        $hariDalamBulan = $carbon->daysInMonth;
+        $incidentList = $incidentQuery->get();
+        $incidentsByDay = $incidentList->groupBy(fn($incident) => Carbon::parse($incident->date)->day);
+
         $tanggalList = [];
 
         for ($i = 1; $i <= $hariDalamBulan; $i++) {
             $tanggal = Carbon::createFromDate($carbon->year, $carbon->month, $i);
-            $tanggalKey = $i;
+            $incidentHariIni = $incidentsByDay->get($i, collect());
 
-            $incidentHariIni = $incidents->get($tanggalKey, collect());
-            $isActiveAll = session('isActiveAll', false);
-            $activeAccidents = session('activeAccidents', []);
-
-            if (!$isActiveAll) {
-                if (!empty($activeAccidents)) {
-                    $incidentHariIni = $incidentHariIni->filter(function ($incident) use ($activeAccidents) {
-                        return in_array($incident->id, $activeAccidents);
-                    });
-                } else {
-                    $incidentHariIni = collect();
-                }
-            }
-
-            $bgClass = null;
+            // Tentukan warna latar
             if ($incidentHariIni->contains(fn($incident) => $incident->category_id === 4)) {
                 $bgClass = 'red';
             } elseif ($incidentHariIni->isNotEmpty()) {
@@ -229,32 +235,27 @@ class MonitoringService
                 $bgClass = '#06923E';
             }
 
-            $categoryBadge = [];
-
-            if ($incidentHariIni->isNotEmpty()) {
-                $kategoriUnik = $incidentHariIni->pluck('accident_id')->unique();
-
-                foreach ($kategoriUnik as $id) {
-                    $badge = match ($id) {
+            // Buat badge kategori
+            $categoryBadge = $incidentHariIni->pluck('accident_id')
+                ->unique()
+                ->map(function ($id) {
+                    return match ($id) {
                         1 => ['icon' => 'fa-solid fa-notes-medical', 'color' => 'text-success'],
                         2 => ['icon' => 'fa-solid fa-fire', 'color' => 'text-danger'],
                         3 => ['icon' => 'fa-solid fa-triangle-exclamation', 'color' => 'text-warning'],
                         default => null,
                     };
+                })
+                ->filter()
+                ->values()
+                ->toArray();
 
-                    if ($badge) {
-                        $categoryBadge[] = $badge;
-                    }
-                }
-            }
-
+            // Cek apakah tanggal masuk periode PICA
             $matchingPica = $picaList->first(function ($pica) use ($tanggal) {
                 $start = Carbon::parse($pica->date_start)->startOfDay();
                 $end = Carbon::parse($pica->date_end)->endOfDay();
-
                 return $tanggal->between($start, $end, true);
             });
-
 
             $tanggalList[] = [
                 'tanggal' => $tanggal->format('Y-m-d'),
@@ -263,7 +264,7 @@ class MonitoringService
                 'status' => $tanggal->isToday() ? 'today' : ($tanggal->isPast() ? 'past' : 'future'),
                 'bg' => $bgClass,
                 'categoryBadge' => $categoryBadge,
-                'pica' => $matchingPica?->id
+                'pica' => $matchingPica?->id,
             ];
         }
 
@@ -274,13 +275,14 @@ class MonitoringService
         });
 
         return [
-            'incidents' => $incidents,
+            'incidents' => $incidentsByDay,
             'bulan' => $bulan,
             'tanggalList' => $tanggalList,
             'offsetHariPertama' => $offsetHariPertama,
             'days' => $days,
         ];
     }
+
 
     public function agc()
     {

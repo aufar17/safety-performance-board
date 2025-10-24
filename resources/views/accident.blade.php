@@ -212,13 +212,14 @@
                                     <form action="{{ route('is-active', $incident->id) }}" method="POST">
                                         @csrf
                                         <div class="form-check form-switch d-flex align-items-center">
-                                            <input class="form-check-input" type="checkbox" role="switch"
-                                                name="simulation" onchange="this.form.submit()" {{
-                                                in_array($incident->id, session('activeAccidents', [])) ? 'checked' : ''
-                                            }}>
+                                            <input class="form-check-input" type="checkbox" role="switch" name="active"
+                                                {{-- ganti dari "simulation" ke "active" --}}
+                                                onchange="this.form.submit()" {{ in_array($incident->id,
+                                            session('activeAccidents', [])) ? 'checked' : '' }}>
                                         </div>
                                     </form>
                                 </td>
+
 
                                 <td>
                                     <button class="badge bg-warning border-0" data-bs-toggle="modal"

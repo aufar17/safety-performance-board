@@ -30,16 +30,25 @@ class AccidentController extends Controller
         $active = $request->has('activeAll');
         session(['isActiveAll' => $active]);
 
-        if ($active) {
-            $incidentIds = Incident::pluck('id')
-                ->map(fn($v) => (int) $v)
-                ->unique()
-                ->values()
-                ->toArray();
+        // Ambil semua incident ID
+        $incidentIds = Incident::pluck('id')
+            ->map(fn($v) => (int) $v)
+            ->unique()
+            ->values()
+            ->toArray();
 
-            session(['activeAccidents' => $incidentIds]);
+        if ($active) {
+            // Saat aktif semua, simpan semua ID ke session
+            session([
+                'activeAccidents' => $incidentIds,
+                'manuallyDisabled' => session('manuallyDisabled', []), // jaga preferensi user
+            ]);
         } else {
-            session(['activeAccidents' => []]);
+            // Saat dimatikan, kosongkan semua
+            session([
+                'activeAccidents' => [],
+                'manuallyDisabled' => [],
+            ]);
         }
 
         return back()->with('success', $active ? 'All accidents are active.' : 'All accidents deactivated.');
@@ -50,7 +59,14 @@ class AccidentController extends Controller
     {
         $id = (int) $id;
 
+        // Ambil session data
         $incidents = collect(session('activeAccidents', []))
+            ->map(fn($v) => (int) $v)
+            ->unique()
+            ->values()
+            ->toArray();
+
+        $manuallyDisabled = collect(session('manuallyDisabled', []))
             ->map(fn($v) => (int) $v)
             ->unique()
             ->values()
@@ -58,18 +74,34 @@ class AccidentController extends Controller
 
         $date = Incident::where('id', $id)->value('date') ?? now()->toDateString();
 
-        if ($request->has('simulation')) {
+        // Cek apakah user menyalakan atau mematikan
+        if ($request->has('active')) {
+            // Aktifkan incident
             if (!in_array($id, $incidents, true)) {
                 $incidents[] = $id;
-                $incidents = array_values(array_unique($incidents));
             }
+
+            // Hapus dari daftar manual nonaktif jika ada
+            $manuallyDisabled = array_values(array_diff($manuallyDisabled, [$id]));
+
             $message = "Accident on {$date} is now visible.";
         } else {
+            // Nonaktifkan incident
             $incidents = array_values(array_filter($incidents, fn($accId) => $accId !== $id));
+
+            // Simpan ke daftar manual nonaktif supaya tetap disembunyikan meski 'all active' nyala
+            if (!in_array($id, $manuallyDisabled, true)) {
+                $manuallyDisabled[] = $id;
+            }
+
             $message = "Accident on {$date} is now hidden.";
         }
 
-        session(['activeAccidents' => $incidents]);
+        // Update session
+        session([
+            'activeAccidents' => $incidents,
+            'manuallyDisabled' => $manuallyDisabled,
+        ]);
 
         return back()->with('success', $message);
     }
