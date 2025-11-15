@@ -41,29 +41,11 @@ class MonitoringService
 
     public function mappings($year)
     {
-        $isActiveAll = session('isActiveAll', false);
-        $activeAccidents = collect(session('activeAccidents', []))->map(fn($v) => (int) $v)->unique()->values()->toArray();
-        $manuallyDisabled = collect(session('manuallyDisabled', []))->map(fn($v) => (int) $v)->unique()->values()->toArray();
-
         $accidents = Accident::all();
-
-        $query = Incident::with(['accident', 'category'])->whereYear('date', $year);
-
-        if ($isActiveAll) {
-            // Tampilkan semua, kecuali yang dinonaktifkan manual
-            if (!empty($manuallyDisabled)) {
-                $query->whereNotIn('id', $manuallyDisabled);
-            }
-        } else {
-            // Tampilkan hanya yang aktif
-            if (!empty($activeAccidents)) {
-                $query->whereIn('id', $activeAccidents);
-            } else {
-                $incidents = collect();
-            }
-        }
-
-        $incidents = $incidents ?? $query->get();
+        $incidents = Incident::with(['accident', 'category'])
+            ->whereYear('date', $year)
+            ->where('active', 1)
+            ->get();
 
         $groupedByAccident = $incidents->groupBy('accident_id');
 
@@ -86,7 +68,8 @@ class MonitoringService
             ];
 
             if ($accIncidents->isNotEmpty()) {
-                $groupedCategories = $accIncidents->filter(fn($incident) => $incident->category)
+                $groupedCategories = $accIncidents
+                    ->filter(fn($incident) => $incident->category)
                     ->groupBy(fn($incident) => $incident->category->category)
                     ->map(fn($group) => $group->count());
 
@@ -107,6 +90,7 @@ class MonitoringService
     }
 
 
+
     public function months()
     {
         $months = [];
@@ -120,10 +104,6 @@ class MonitoringService
 
     public function accumulativeAccident($year)
     {
-        $isActiveAll = session('isActiveAll', false);
-        $activeAccidents = collect(session('activeAccidents', []))->map(fn($v) => (int) $v)->unique()->values()->toArray();
-        $manuallyDisabled = collect(session('manuallyDisabled', []))->map(fn($v) => (int) $v)->unique()->values()->toArray();
-
         $currentMonth = now()->month;
 
         $colorMap = [
@@ -132,24 +112,23 @@ class MonitoringService
             3 => '#FFCE56',
         ];
 
-        $accidents = Accident::all();
+        $accidents = Accident::get();
 
-        $query = Incident::whereYear('date', $year)
+        $activeAccidents = Incident::where('active', 1)
+            ->pluck('accident_id')
+            ->unique()
+            ->toArray();
+
+        $query = Incident::where('active', 1)
+            ->whereYear('date', $year)
             ->whereMonth('date', '<=', $currentMonth);
 
-        if ($isActiveAll) {
-            if (!empty($manuallyDisabled)) {
-                $query->whereNotIn('id', $manuallyDisabled);
-            }
+        if (empty($activeAccidents)) {
+            $incidents = collect();
         } else {
-            if (!empty($activeAccidents)) {
-                $query->whereIn('id', $activeAccidents);
-            } else {
-                $incidents = collect();
-            }
+            $query->whereIn('accident_id', $activeAccidents);
+            $incidents = $query->get();
         }
-
-        $incidents = $incidents ?? $query->get();
 
         $groupedByAccident = $incidents->groupBy('accident_id');
 
@@ -157,22 +136,30 @@ class MonitoringService
         $chartData = [];
 
         foreach ($accidents as $accident) {
+
+            if (!in_array($accident->id, $activeAccidents)) {
+                continue;
+            }
+
             $accIncidents = $groupedByAccident->get($accident->id, collect());
 
             $monthlyCounts = $accIncidents
-                ->groupBy(fn($incident) => Carbon::parse($incident->date)->month)
-                ->map(fn($group) => $group->count())
+                ->groupBy(fn($i) => Carbon::parse($i->date)->month)
+                ->map(fn($g) => $g->count())
                 ->toArray();
 
             $tableData[$accident->accident] = [
                 'data' => array_map(fn($i) => $monthlyCounts[$i] ?? 0, range(1, $currentMonth)),
             ];
+
             $runningTotal = 0;
             $accumulated = [];
+
             for ($i = 1; $i <= $currentMonth; $i++) {
                 $runningTotal += $monthlyCounts[$i] ?? 0;
                 $accumulated[] = $runningTotal;
             }
+
             $chartData[$accident->accident] = [
                 'data' => $accumulated,
                 'color' => $colorMap[$accident->id] ?? '#000000',
@@ -186,48 +173,43 @@ class MonitoringService
     }
 
 
-
-
     public function calendar(): array
     {
         $carbon = Carbon::now()->locale('id');
         $bulan = $carbon->translatedFormat('F Y');
         $hariDalamBulan = $carbon->daysInMonth;
 
-        $isActiveAll = session('isActiveAll', false);
-        $activeAccidents = collect(session('activeAccidents', []))
-            ->map(fn($v) => (int) $v)
+        $activeAccidents = Incident::where('active', 1)
+            ->pluck('accident_id')
             ->unique()
-            ->values()
             ->toArray();
 
-        // Ambil semua PICA
         $picaList = Pica::all();
 
-        // Ambil Incident sesuai filter session
         $incidentQuery = Incident::with(['accident', 'category'])
+            ->where('active', 1)
             ->whereMonth('date', $carbon->month)
             ->whereYear('date', $carbon->year);
 
-        if (!$isActiveAll) {
-            if (!empty($activeAccidents)) {
-                $incidentQuery->whereIn('id', $activeAccidents);
-            } else {
-                $incidentQuery->whereRaw('1 = 0'); // kosong
-            }
+        if (!empty($activeAccidents)) {
+            $incidentQuery->whereIn('accident_id', $activeAccidents);
+        } else {
+            $incidentQuery->whereRaw('1 = 0');
         }
 
         $incidentList = $incidentQuery->get();
-        $incidentsByDay = $incidentList->groupBy(fn($incident) => Carbon::parse($incident->date)->day);
+
+        $incidentsByDay = $incidentList->groupBy(fn($i) => Carbon::parse($i->date)->day);
 
         $tanggalList = [];
 
         for ($i = 1; $i <= $hariDalamBulan; $i++) {
+
             $tanggal = Carbon::createFromDate($carbon->year, $carbon->month, $i);
+
             $incidentHariIni = $incidentsByDay->get($i, collect());
 
-            // Tentukan warna latar
-            if ($incidentHariIni->contains(fn($incident) => $incident->category_id === 4)) {
+            if ($incidentHariIni->contains(fn($inc) => $inc->category_id == 4)) {
                 $bgClass = 'red';
             } elseif ($incidentHariIni->isNotEmpty()) {
                 $bgClass = 'yellow';
@@ -235,7 +217,6 @@ class MonitoringService
                 $bgClass = '#06923E';
             }
 
-            // Buat badge kategori
             $categoryBadge = $incidentHariIni->pluck('accident_id')
                 ->unique()
                 ->map(function ($id) {
@@ -250,10 +231,9 @@ class MonitoringService
                 ->values()
                 ->toArray();
 
-            // Cek apakah tanggal masuk periode PICA
             $matchingPica = $picaList->first(function ($pica) use ($tanggal) {
                 $start = Carbon::parse($pica->date_start)->startOfDay();
-                $end = Carbon::parse($pica->date_end)->endOfDay();
+                $end   = Carbon::parse($pica->date_end)->endOfDay();
                 return $tanggal->between($start, $end, true);
             });
 
@@ -270,9 +250,10 @@ class MonitoringService
 
         $offsetHariPertama = Carbon::createFromDate($carbon->year, $carbon->month, 1)->dayOfWeekIso;
 
-        $days = collect(range(1, 7))->map(function ($i) {
-            return Carbon::create()->startOfWeek()->addDays($i - 1)->locale('id')->translatedFormat('l');
-        });
+        $days = collect(range(1, 7))->map(
+            fn($i) =>
+            Carbon::create()->startOfWeek()->addDays($i - 1)->locale('id')->translatedFormat('l')
+        );
 
         return [
             'incidents' => $incidentsByDay,
@@ -284,19 +265,20 @@ class MonitoringService
     }
 
 
+
+
     public function agc()
     {
         $now = Carbon::now()->format('m');
 
         $agc = AgcLevelHistory::with('agc')
-            ->whereMonth('created_at', $now)
             ->latest('id')
             ->first();
 
+        $query = Incident::where('category_id', 3)
+            ->where('active', 1);
 
-        $latestLwd = Incident::where('category_id', 3)
-            ->latest('created_at')
-            ->first();
+        $latestLwd = $query->orderByDesc('date')->first();
 
         $sinceLwd = $latestLwd
             ? floor(Carbon::parse($latestLwd->date)->floatDiffInDays(Carbon::now()))
@@ -306,9 +288,15 @@ class MonitoringService
             $sinceLwd = 0;
         }
 
+        $accident_hours_non_lti = $agc && $sinceLwd !== null
+            ? $agc->man_power * 8 * $sinceLwd
+            : 0;
+
         return [
             'agc' => $agc,
+            'accident_hours_non_lti' => $accident_hours_non_lti,
             'sinceLwd' => $sinceLwd,
+            'latestLwd' => $latestLwd,
         ];
     }
 }

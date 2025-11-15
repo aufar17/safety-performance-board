@@ -32,7 +32,7 @@ class AccidentService
 
                 if ($agc) {
                     $sinceLwd = floor(Carbon::parse($incident->date)->floatDiffInDays(Carbon::now()));
-                    $accident_hours_non_lti = $agc->total_hours * $sinceLwd;
+                    $accident_hours_non_lti = $agc->man_power * 8 * $sinceLwd;
 
                     $agc->update([
                         'accident_hours_non_lti' => $accident_hours_non_lti
@@ -40,11 +40,20 @@ class AccidentService
                 }
             }
 
+            $activeAccidents = collect(session('activeAccidents', []))
+                ->map(fn($v) => (int) $v)
+                ->filter(fn($v) => $v !== $incident->id)
+                ->values()
+                ->toArray();
+
+
+            session(['activeAccidents' => $activeAccidents]);
+
             DB::commit();
 
             return [
                 'success' => true,
-                'message' => 'Data accident saved successfully.',
+                'message' => 'Data accident saved successfully and set as inactive.',
                 'data'    => $incident,
             ];
         } catch (\Exception $e) {
@@ -56,6 +65,7 @@ class AccidentService
             ];
         }
     }
+
 
     public function update(Request $request): array
     {
@@ -69,6 +79,10 @@ class AccidentService
 
         DB::beginTransaction();
         try {
+            $activeAccidents = collect(session('activeAccidents', []))->map(fn($v) => (int) $v)->toArray();
+
+            $wasActive = in_array($incident->id, $activeAccidents, true);
+
             $incident->update([
                 'accident_id' => $request->accident,
                 'category_id' => $request->category,
@@ -81,13 +95,23 @@ class AccidentService
 
                 if ($agc) {
                     $sinceLwd = floor(Carbon::parse($incident->date)->floatDiffInDays(Carbon::now()));
-                    $accident_hours_non_lti = $agc->total_hours * $sinceLwd;
+                    $accident_hours_non_lti = $agc->man_power * 8 * $sinceLwd;
 
                     $agc->update([
                         'accident_hours_non_lti' => $accident_hours_non_lti
                     ]);
                 }
             }
+
+            if ($wasActive) {
+                if (!in_array($incident->id, $activeAccidents, true)) {
+                    $activeAccidents[] = $incident->id;
+                }
+            } else {
+                $activeAccidents = array_values(array_filter($activeAccidents, fn($id) => $id !== $incident->id));
+            }
+
+            session(['activeAccidents' => $activeAccidents]);
 
             DB::commit();
 
@@ -98,7 +122,6 @@ class AccidentService
             ];
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
 
             return [
                 'success' => false,
@@ -107,6 +130,7 @@ class AccidentService
             ];
         }
     }
+
 
     public function delete(Request $request): array
     {
@@ -131,5 +155,45 @@ class AccidentService
                 'error'   => $e->getMessage(),
             ];
         }
+    }
+
+    public function toggleSimulation(bool $isSimulation): string
+    {
+        $today = now()->toDateString();
+
+        Incident::whereDate('date', $today)->update([
+            'simulation' => $isSimulation ? 1 : 0,
+        ]);
+
+        return $isSimulation
+            ? 'Today is emergency response simulation.'
+            : 'Emergency response simulation canceled.';
+    }
+
+
+    public function toggleAllActive(bool $setActive): string
+    {
+        Incident::query()->update([
+            'active' => $setActive ? 1 : 0,
+        ]);
+
+        return $setActive
+            ? 'All accidents are active.'
+            : 'All accidents deactivated.';
+    }
+
+
+    public function toggleActive(int $id, bool $isActive): string
+    {
+        $incident = Incident::findOrFail($id);
+        $date = $incident->date ?? now()->toDateString();
+
+        $incident->update([
+            'active' => $isActive ? 1 : 0,
+        ]);
+
+        return $isActive
+            ? "Accident on {$date} is now visible."
+            : "Accident on {$date} is now hidden.";
     }
 }

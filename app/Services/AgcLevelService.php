@@ -19,7 +19,6 @@ class AgcLevelService
     {
         DB::beginTransaction();
         try {
-            // paksa semua nilai jadi integer (default 0 kalau kosong/null)
             $lossday        = (int) ($request->loss_day ?? 0);
             $total_accident = (int) ($request->total_accident ?? 0);
             $man_power      = (int) ($request->man_power ?? 0);
@@ -66,6 +65,7 @@ class AgcLevelService
                 'accident_hours_non_lti' => $accident_hours_non_lti,
                 'work_hours'             => $work_hours_fr,
             ]);
+
             DB::commit();
 
             return [
@@ -97,7 +97,6 @@ class AgcLevelService
 
             $accident_hours_non_lti = $man_power * 8 * $sinceLwd;
 
-            // Cegah pembagian dengan nol
             $fr = ($work_hours_fr > 0)
                 ? round(($total_accident / $work_hours_fr) * 1000000, 2)
                 : 0;

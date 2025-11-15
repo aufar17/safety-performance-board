@@ -16,6 +16,8 @@ class Incident extends Model
         'category_id',
         'date',
         'description',
+        'simulation',
+        'active',
     ];
 
 

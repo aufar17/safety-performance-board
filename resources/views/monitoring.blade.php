@@ -78,7 +78,8 @@
                             chartId="accidentChart1" />
 
                         <x-statistic-information-k3 title="Informasi Statistik K3" icon="fa-solid fa-desktop"
-                            :agc="$agc['agc']" :sinceLwd="$agc['sinceLwd']" />
+                            :agc="$agc['agc']" :sinceLwd="$agc['sinceLwd']"
+                            :accident_hours_non_lti="$agc['accident_hours_non_lti']" />
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-12 mt-4 mt-lg-0 px-4">

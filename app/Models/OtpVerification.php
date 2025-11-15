@@ -20,12 +20,8 @@ class OtpVerification extends Model
         'use_date',
     ];
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'id_user', 'id');
-    }
     public function ctuser(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'npk', 'npk');
+        return $this->belongsTo(CTUser::class, 'npk', 'npk');
     }
 }

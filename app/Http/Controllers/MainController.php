@@ -30,11 +30,19 @@ class MainController extends Controller
         $filterMonthYear = $request->input('filterMonthYear', $now->format('Y-m'));
         [$year, $month] = explode('-', $filterMonthYear);
         $carbonMonth = Carbon::createFromDate($year, $month, 1);
+
         $incidents = Incident::with('accident', 'category')
+            ->orderByDesc('date')
             ->paginate(10);
 
         $accidents = Accident::all();
         $categories = CategoryAccident::all();
+
+        $isSimulationToday = Incident::whereDate('date', now()->toDateString())
+            ->where('simulation', 1)
+            ->exists();
+
+        $isAllActive = Incident::where('active', 0)->doesntExist();
 
         $data = [
             'incidents' => $incidents,
@@ -43,11 +51,14 @@ class MainController extends Controller
             'month' => $carbonMonth->format('F'),
             'year' => $year,
             'now' => Carbon::createFromDate($year, $month)->format('F Y'),
-            'user' => $user
+            'user' => $user,
+            'isSimulationToday' => $isSimulationToday,
+            'isAllActive' => $isAllActive,
         ];
 
         return view('accident', $data);
     }
+
 
 
     public function monitoring()
@@ -96,6 +107,7 @@ class MainController extends Controller
             : 0;
 
         $agcLevels = AgcLevelHistory::with('agc')
+            ->latest()
             ->paginate(10);
 
 

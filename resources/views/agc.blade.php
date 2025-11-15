@@ -277,15 +277,17 @@
                                 <div class="mb-3">
                                     <label class="form-label">Accident Days</label>
                                     <input type="number" class="form-control" id="new_accident_days"
-                                        value="{{ $sinceLwd }}" readonly>
+                                        name="accident_days" value="{{ $sinceLwd }}" readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Total Man Power</label>
-                                    <input type="number" class="form-control" id="new_man_power" required>
+                                    <input type="number" class="form-control" id="new_man_power" name="man_power"
+                                        required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Accident Hours</label>
-                                    <input type="number" class="form-control" id="new_accident_hours" readonly>
+                                    <input type="number" class="form-control" id="new_accident_hours"
+                                        name="accident_hours" readonly>
                                 </div>
                             </div>
 
@@ -302,27 +304,31 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Total Accident</label>
-                                    <input type="number" class="form-control" id="new_total_accident" required>
+                                    <input type="number" class="form-control" id="new_total_accident"
+                                        name="total_accident" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Total Work Hours (FR)</label>
-                                    <input type="number" class="form-control" id="new_work_hours_fr" required>
+                                    <input type="number" class="form-control" id="new_work_hours_fr"
+                                        name="work_hours_fr" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">FR</label>
-                                    <input type="number" class="form-control" id="new_fr" readonly>
+                                    <input type="number" class="form-control" id="new_fr" name="fr" readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Loss Day</label>
-                                    <input type="number" class="form-control" id="new_loss_day" required>
+                                    <input type="number" class="form-control" id="new_loss_day" name="loss_day"
+                                        required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Total Work Hours (SR)</label>
-                                    <input type="number" class="form-control" id="new_work_hours_sr" required>
+                                    <input type="number" class="form-control" id="new_work_hours_sr"
+                                        name="work_hours_sr" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">SR</label>
-                                    <input type="number" class="form-control" id="new_sr" readonly>
+                                    <input type="number" class="form-control" id="new_sr" name="sr" readonly>
                                 </div>
                             </div>
                         </div>

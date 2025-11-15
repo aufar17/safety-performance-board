@@ -57,19 +57,13 @@
                     <div class="col-lg-2 d-flex justify-content-start">
                         <form action="{{ route('simulation') }}" method="POST" id="simulationForm">
                             @csrf
-                            <div class="row mb-3">
-                                <div class="col-sm-12">
-                                    <div class="form-check form-switch d-flex align-items-center">
-                                        <input class="form-check-input" type="checkbox" role="switch"
-                                            id="flexSwitchCheckDefault" name="simulation" {{
-                                            session('dailySimulation')[now()->format('Y-m-d')] ?? false ? 'checked' : ''
-                                        }}>
-                                        <label class="form-check-label ms-2 mb-0 fw-semibold"
-                                            for="flexSwitchCheckDefault">
-                                            Simulasi Tanggap Darurat
-                                        </label>
-                                    </div>
-                                </div>
+                            <div class="form-check form-switch d-flex align-items-center">
+                                <input class="form-check-input" type="checkbox" role="switch" id="simulationSwitch"
+                                    name="simulation" onchange="this.form.submit()" {{ $isSimulationToday ? 'checked'
+                                    : '' }}>
+                                <label class="form-check-label ms-2 fw-semibold" for="simulationSwitch">
+                                    Simulasi Tanggap Darurat
+                                </label>
                             </div>
                         </form>
                     </div>
@@ -78,14 +72,12 @@
                             @csrf
                             <div class="form-check form-switch d-flex align-items-center">
                                 <input class="form-check-input" type="checkbox" role="switch" id="activeAllSwitch"
-                                    name="activeAll" onchange="this.form.submit()" {{ session('isActiveAll', false)
-                                    ? 'checked' : '' }}>
+                                    name="activeAll" onchange="this.form.submit()" {{ $isAllActive ? 'checked' : '' }}>
                                 <label class="form-check-label ms-2 fw-semibold" for="activeAllSwitch">
                                     Active All
                                 </label>
                             </div>
                         </form>
-
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -213,14 +205,11 @@
                                         @csrf
                                         <div class="form-check form-switch d-flex align-items-center">
                                             <input class="form-check-input" type="checkbox" role="switch" name="active"
-                                                {{-- ganti dari "simulation" ke "active" --}}
-                                                onchange="this.form.submit()" {{ in_array($incident->id,
-                                            session('activeAccidents', [])) ? 'checked' : '' }}>
+                                                onchange="this.form.submit()" {{ $incident->active == 1 ? 'checked' : ''
+                                            }}>
                                         </div>
                                     </form>
                                 </td>
-
-
                                 <td>
                                     <button class="badge bg-warning border-0" data-bs-toggle="modal"
                                         data-bs-target="#editAccidentModal{{ $incident->id }}">
